@@ -1,0 +1,13 @@
+
+<formtemplate id = "accion"></formtemplate>
+<div class="portlet-header">
+	<div class="portlet-title-no-controls"> Actividades </div>
+</div>
+<div id = "encabezado" class="portlet">
+	<include src="ver_actividades">
+</div>
+
+<div id = "resultados" class="portlet" style="min-height: 400px;">
+	<include src="resultados">
+</div>
+

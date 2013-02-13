@@ -1,0 +1,19 @@
+ad_page_contract {
+
+    
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	anio:notnull
+	id_calendario:notnull
+	fecha_publicacion:notnull
+
+} -properties {
+}
+
+set res [ td_calendarios::modificar_calendario -anio -id_calendario -fecha_publicacion 
+ns_write $res
+
+

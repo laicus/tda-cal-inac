@@ -1,0 +1,572 @@
+
+//-------------------------------Variables-----------------------------
+
+var gConexionSedes;
+var gConexionDepartamentos;
+var gConexionPlanes;
+var gConexionCursos;
+var gConexionGrupos;
+var gConexionIncluirCursos;
+var gConexionIncluirDeptos;
+var gConexionIncluirUsuarios;
+
+//------------------------------CrearXmlHttp---------------------------
+
+function CrearXmlHttp()
+{
+    var lConexion = null;
+
+    try
+    {
+	// Firefox, Opera 8.0+, Safari
+	lConexion = new XMLHttpRequest();
+    }
+    catch (ef)
+    {
+	// Internet Explorer
+	try
+        {
+	    lConexion = new ActiveXObject("Msxml2.XMLHTTP");
+	}
+	catch (ei)
+	{
+	    lConexion = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+    }
+    return lConexion;
+}
+
+//---------------------------------Eventos------------------------------------
+
+function CargarAgregarSedes()
+{
+    gConexionSedes = CrearXmlHttp();
+
+    if (gConexionSedes != null)
+    {
+	gConexionSedes.onreadystatechange = RespuestaCargarAgregarSedes;
+	gConexionSedes.open("GET", "admin/sedes/sedes-agregar", true);
+	gConexionSedes.send(null);
+    }
+}
+
+function RespuestaCargarAgregarSedes()
+{
+    if (gConexionSedes.readyState == 4)
+    {
+	if (gConexionSedes.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionSedes.responseText;
+	}
+    }
+}
+
+//----------------------------------------------------------------------------
+
+function IncluirSedes()
+{
+    gConexionSedes = CrearXmlHttp();
+
+    if (gConexionSedes != null)
+    {
+	gConexionSedes.onreadystatechange = RespuestaIncluirSedes;
+	gConexionSedes.open("GET", "admin/sedes/sedes-agregar-2", true);
+	gConexionSedes.send(null);
+    }
+}
+
+function RespuestaIncluirSedes()
+{
+    if (gConexionSedes.readyState == 4)
+    {
+	if (gConexionSedes.status == 200)
+	{
+	    CargarAgregarSedes();
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function CargarDepartamentos()
+{
+    gConexionDepartamentos = CrearXmlHttp();
+
+    if (gConexionDepartamentos == null)
+    {
+	return;	
+    }
+    
+    var sede = document.getElementById("cod_sede");
+    
+    if (sede == null) {
+	sede = "";
+    }
+    else {
+	sede = sede.value;
+    }
+    gConexionDepartamentos.onreadystatechange = RespuestaCargarDepartamentos;
+    gConexionDepartamentos.open("GET", "admin/departamentos/departamentos?cod_sede=" + sede, true);
+    gConexionDepartamentos.send(null);
+}
+
+function RespuestaCargarDepartamentos()
+{
+    if (gConexionDepartamentos.readyState == 4)
+    {
+	if (gConexionDepartamentos.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionDepartamentos.responseText;
+	    //ActualizarDepartamentos();
+	}
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+function CargarAgregarDepartamentos()
+{
+    gConexionDepartamentos = CrearXmlHttp();
+
+    if (gConexionDepartamentos == null)
+    {
+	return;	
+    }
+    
+    var sede = document.getElementById("cod_sede_agregar_depto");
+    
+    if (sede == null) {
+	sede = "";
+    }
+    else {
+	sede = sede.value;
+    }
+    gConexionDepartamentos.onreadystatechange = RespuestaCargarAgregarDepartamentos;
+    gConexionDepartamentos.open("GET", "admin/departamentos/departamentos-agregar?cod_sede=" + sede, true);
+    gConexionDepartamentos.send(null);
+}
+
+function RespuestaCargarAgregarDepartamentos()
+{
+    if (gConexionDepartamentos.readyState == 4)
+    {
+	if (gConexionDepartamentos.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionDepartamentos.responseText;
+	    //ActualizarDepartamentos();
+	}
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+function IncluirDepartamentos() {
+    
+    gConexionDepartamentos = CrearXmlHttp();
+
+    if (gConexionDepartamentos == null)
+    {
+	return;	
+    }
+    
+    var sede = document.getElementById("cod_sede_agregar");
+    
+    if (sede == null) {
+	sede = "";
+    }
+    else {
+	sede = sede.value;
+    }
+    gConexionDepartamentos.onreadystatechange = RespuestaCargarAgregarDepartamentos;
+    gConexionDepartamentos.open("GET", "admin/departamentos/departamentos-agregar-2?cod_sede=" + sede, true);
+    gConexionDepartamentos.send(null);
+}
+
+function IncluirDepartamentosRespuesta() {
+
+    if (gConexionDepartamentos.readyState == 4)
+    {
+	if (gConexionDepartamentos.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionDepartamentos.responseText;
+	}
+    }
+}
+ 
+//---------------------------------------------------------------------
+
+function CargarPlanes()
+{
+    gConexionPlanes = CrearXmlHttp();
+
+    if (gConexionPlanes == null)
+    {
+	return;	
+    }
+    var departamento = document.getElementById("seleccion_planes_cod_departamento");
+    var grado = document.getElementById("seleccion_planes_cod_grado");
+
+    if (departamento == null)
+	departamento = "";
+    else
+	departamento = departamento.value;
+    if (grado == null)
+	grado = "";
+    else
+	grado = grado.value;
+    gConexionPlanes.onreadystatechange = RespuestaCargarPlanes;
+    gConexionPlanes.open("GET", "admin/planes/planes?cod_departamento=" + departamento + "&cod_grado=" + grado, true);
+    gConexionPlanes.send(null);
+}
+
+function RespuestaCargarPlanes()
+{
+    if (gConexionPlanes.readyState == 4)
+    {
+	if (gConexionPlanes.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionPlanes.responseText;
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function CargarAgregarPlanes()
+{
+    gConexionPlanes = CrearXmlHttp();
+
+    if (gConexionPlanes == null)
+    {
+	return;	
+    }
+    var departamento = document.getElementById("cod_depto_agregar_plan");
+
+    if (departamento == null)
+	departamento = "";
+    else
+	departamento = departamento.value;
+
+    gConexionPlanes.onreadystatechange = RespuestaCargarAgregarPlanes;
+    gConexionPlanes.open("GET", "admin/planes/planes-agregar?cod_depto=" + departamento, true);
+    gConexionPlanes.send(null);
+}
+
+function RespuestaCargarAgregarPlanes()
+{
+    if (gConexionPlanes.readyState == 4)
+    {
+	if (gConexionPlanes.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionPlanes.responseText;
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function IncluirPlanes()
+{
+    gConexionPlanes = CrearXmlHttp();
+
+    if (gConexionPlanes == null)
+    {
+	return;	
+    }
+    var departamento = document.getElementById("cod_depto_agregar_plan");
+
+    if (departamento == null)
+	departamento = "";
+    else
+	departamento = departamento.value;
+
+    gConexionPlanes.onreadystatechange = RespuestaIncluirPlanes;
+    gConexionPlanes.open("GET", "admin/planes/planes-agregar-2?cod_depto=" + departamento, true);
+    gConexionPlanes.send(null);
+}
+
+function RespuestaIncluirPlanes()
+{
+    if (gConexionPlanes.readyState == 4)
+    {
+	if (gConexionPlanes.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionPlanes.responseText;
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function CargarCursos()
+{
+    gConexionCursos = CrearXmlHttp();
+
+    if (gConexionCursos == null)
+    {
+	return;	
+    }
+    var departamento = document.getElementById("cod_departamento_curso");
+
+    if (departamento == null)
+	departamento = "";
+    else
+	departamento = departamento.value;
+
+    gConexionCursos.onreadystatechange = RespuestaCargarCursos;
+    gConexionCursos.open("GET", "admin/cursos/cursos?cod_departamento=" + departamento, true);
+    gConexionCursos.send(null);
+}
+
+function RespuestaCargarCursos()
+{
+    if (gConexionCursos.readyState == 4)
+    {
+	if (gConexionCursos.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionCursos.responseText;
+	    //ActualizarCursos();
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function CargarGrupos()
+{
+    gConexionGrupos = CrearXmlHttp();
+
+    if (gConexionGrupos == null)
+    {
+	return;	
+    }
+    var parametros = "?";
+    var sede = document.getElementById("cod_sede_grupo");
+    var departamento = document.getElementById("cod_departamento_grupo");
+    var curso = document.getElementById("cod_curso_grupo");
+
+    if (sede != null)
+	parametros += "cod_sede_grupo=" + sede.value + "&";
+    if (departamento != null)
+	parametros += "cod_departamento_grupo=" + departamento.value + "&";
+    if (curso != null)
+	parametros += "cod_curso_grupo=" + curso.value;
+	
+    gConexionGrupos.onreadystatechange = RespuestaCargarGrupos;
+    gConexionGrupos.open("GET", "admin/grupos" + parametros, true);
+    gConexionGrupos.send(null);
+}
+
+function RespuestaCargarGrupos()
+{
+    if (gConexionGrupos.readyState == 4)
+    {
+	if (gConexionGrupos.status == 200)
+	{
+	    document.getElementById("grupos").innerHTML = gConexionGrupos.responseText;
+	    //ActualizarGrupos();
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function CargarCursosAgregar()
+{
+    gConexionIncluirCursos = CrearXmlHttp();
+
+    if (gConexionIncluirCursos == null)
+    {
+	return;	
+    }
+    var parametros = "?";
+    var sede = document.getElementById("agregar_curso_sede");
+    var departamento = document.getElementById("agregar_curso_depto");
+
+    if (sede != null)
+	parametros += "cod_sede=" + sede.value + "&";
+    if (departamento != null)
+	parametros += "cod_depto=" + departamento.value;
+	
+    gConexionIncluirCursos.onreadystatechange = RespuestaCargarCursosAgregar;
+    gConexionIncluirCursos.open("GET", "admin/cursos/cursos-agregar" + parametros, true);
+    gConexionIncluirCursos.send(null);
+}
+
+function RespuestaCargarCursosAgregar()
+{
+    if (gConexionIncluirCursos.readyState == 4)
+    {
+	if (gConexionIncluirCursos.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionIncluirCursos.responseText;
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function EjecutarCursosAgregar()
+{
+    gConexionIncluirCursos = CrearXmlHttp();
+
+    if (gConexionIncluirCursos == null)
+    {
+	return;	
+    }
+    var parametros = "?";
+    var sede = document.getElementById("agregar_curso_sede");
+    var departamento = document.getElementById("agregar_curso_depto");
+
+    if (sede != null)
+	parametros += "cod_sede=" + sede.value + "&";
+    if (departamento != null)
+	parametros += "cod_depto=" + departamento.value;
+	
+    gConexionIncluirCursos.onreadystatechange = RespuestaEjecutarCursosAgregar;
+    gConexionIncluirCursos.open("GET", "admin/cursos/cursos-agregar-2" + parametros, true);
+    gConexionIncluirCursos.send(null);
+}
+
+function RespuestaEjecutarCursosAgregar()
+{
+    if (gConexionIncluirCursos.readyState == 4)
+    {
+	if (gConexionIncluirCursos.status == 200)
+	{
+	    CargarCursosAgregar();
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function InclusionGrupos()
+{
+    gConexionGrupos = CrearXmlHttp();
+
+    if (gConexionGrupos == null)
+    {
+	return;	
+    }
+    var sede = document.getElementById("cod_sede_inclusion_grupos").value;
+    var departamento = document.getElementById("cod_depto_inclusion_grupos").value;
+    var periodo = document.getElementById("periodo_inclusion_grupos").value
+
+    if (sede == "")
+	sede = "%"
+    if (departamento == "")
+    	departamento = "%";
+
+    gConexionGrupos.onreadystatechange = RespuestaInclusionGrupos;
+    gConexionGrupos.open("GET", "admin/grupos/grupos-agregar-2?sede=" + sede + "&departamento=" + departamento + "&periodo=" + periodo, true);
+    gConexionGrupos.send(null);
+}
+
+function RespuestaInclusionGrupos()
+{
+    if (gConexionGrupos.readyState == 4)
+    {
+	if (gConexionGrupos.status == 200) 
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionGrupos.responseText;
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function CargarInclusionGrupos()
+{
+    gConexionIncluirDeptos = CrearXmlHttp();
+
+    if (gConexionIncluirDeptos == null)
+    {
+	return;	
+    }
+    gConexionIncluirDeptos.onreadystatechange = RespuestaCargarInclusionGrupos;
+    gConexionIncluirDeptos.open("GET", "admin/grupos/grupos-agregar", true);
+    gConexionIncluirDeptos.send(null);
+}
+
+function RespuestaCargarInclusionGrupos()
+{
+    if (gConexionIncluirDeptos.readyState == 4)
+    {
+	if (gConexionIncluirDeptos.status == 200)
+	{
+	    document.getElementById("recuadro_centro").innerHTML = gConexionIncluirDeptos.responseText;
+	}
+    }
+}
+
+//---------------------------------------------------------------------
+
+function EliminarSede(p_CodSede, p_NomSede)
+{
+    alert("¿Está seguro que desea eliminar la informacion de la Sede: " + p_CodSede + " " + p_NomSede  + "?");
+}
+
+// --------------------------------------------------------------------
+
+function ActualizarSede()
+{
+    var cod_sede = document.getElementById("cod_sede_act").value;
+    var dsc_sede = document.getElementById("new_nom_sede").value;
+
+    ajaxpage("admin/sedes/sedes-actualizar-2?cod_sede=" + cod_sede + "&dsc_sede=" + dsc_sede, 'recuadro_centro')
+}
+
+// FUNCIONES DE USUARIO
+// =====================
+
+function BuscarEstudiantes()
+{
+    gConexionIncluirUsuarios = CrearXmlHttp();
+
+    if (gConexionIncluirUsuarios != null)
+    {
+	var Carne = document.getElementById("carne").value;
+
+	gConexionIncluirUsuarios.onreadystatechange = RespuestaBuscarEstudiantes;
+	gConexionIncluirUsuarios.open("GET", "admin/estudiantes/estudiantes-agregar-chunk?Carne=" + Carne, true);
+	gConexionIncluirUsuarios.send(null);
+    }
+}
+
+function RespuestaBuscarEstudiantes()
+{
+    if (gConexionIncluirUsuarios.readyState == 4)
+    {
+	if (gConexionIncluirUsuarios.status == 200)
+	{
+	    document.getElementById("estudiantes_ws").innerHTML = gConexionIncluirUsuarios.responseText;
+	}
+    }
+}
+
+// ---------------------------------------------------------------------------
+
+function IncluirEstudiantes(p_Carne)
+{
+    
+    gConexionIncluirUsuarios = CrearXmlHttp();
+
+    if (gConexionIncluirUsuarios != null)
+    {
+	gConexionIncluirUsuarios.onreadystatechange = RespuestaIncluirEstudiantes;
+	gConexionIncluirUsuarios.open("GET", "admin/estudiantes/estudiantes-agregar-2?Carne=" + p_Carne, true);
+	gConexionIncluirUsuarios.send(null);
+    }
+}
+
+function RespuestaIncluirEstudiantes()
+{
+    if (gConexionIncluirUsuarios.readyState == 4)
+    {
+	if (gConexionIncluirUsuarios.status == 200)
+	{
+	    document.getElementById("estudiantes_ws").innerHTML = gConexionIncluirUsuarios.responseText;
+	}
+    }
+}

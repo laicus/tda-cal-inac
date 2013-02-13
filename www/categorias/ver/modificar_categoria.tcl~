@@ -1,0 +1,57 @@
+ad_page_contract {
+
+    
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	id_categoria:notnull
+} -properties {
+}
+
+
+
+
+set datos [td_categorias::seleccionar_categoria -id_categoria $id_categoria]
+
+set nom_categoria [lindex $datos 0]
+set dsc_categoria [lindex $datos 1]
+
+
+
+
+#------------------------------------------------------------------
+ad_form  -name formulario -mode edit -has_submit 1 -form {
+
+
+	{txt_nombre_categoria:text(text),optional
+	{label "Nombre Categoria:"}
+	{value $nom_categoria}
+	{html {style "width:300px"}}
+	{optional}
+	}
+
+	{txt_descripcion_categoria:text(textarea),optional
+	{label "Descripcion:"}
+	{value $dsc_categoria}
+	{html {style "width:300px" rows 2 cols 50}}
+	{optional}
+	}
+
+	#{lst_modalidades:text(checkbox),multiple,optional
+	#{label "Modalidades a las que se asocia esta categoria"}
+	#{options $lista_modalidades}
+	#{optional}
+        #{values $lst_modalidades_viejas}
+	#{html {class lst_modalidades}}
+	#}
+
+}
+
+ad_form -name categoria -has_submit 1 -form {
+    {categoria:integer(hidden) {value $id_categoria} {html {id "id_categoria"} } }
+}
+
+
+

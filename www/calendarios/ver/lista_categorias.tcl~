@@ -1,0 +1,47 @@
+ad_page_contract {
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	{id_modalidad "%"}
+
+} -properties {
+}
+
+
+set columnas {
+
+
+	nom_categoria {
+	  label "Nombre Categoria"
+	}
+	dsc_categoria {
+	  label "Descripcion"
+	}
+
+	accion_modificar { 
+		label "Modificar" 
+		display_template { <center> <nobr> <a href=\"javascript:cargar_form_modificar_categoria('@categorias.id_categoria@')"\>Modificar</a> </nobr> </center> }
+	}
+
+	accion_eliminar { 
+		label "Eliminar" 
+		display_template { <center> <nobr> <a href=\"javascript:cargar_form_eliminar_categoria('@categorias.id_categoria@')"\>Eliminar</a> </nobr> </center> }
+	}
+}
+
+template::list::create \
+    -name grid_categorias \
+    -multirow categorias \
+    -key term_id \
+    -elements $columnas \
+    -no_data "No existen categorias"
+
+
+
+set ano [clock format [clock seconds] -format "%Y"]
+
+td_categorias::seleccionar_categorias_para_grid -multirow categorias 
+
+

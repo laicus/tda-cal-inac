@@ -1,0 +1,151 @@
+
+
+//-------------------------------Variables-----------------------------
+
+var gConexionCategorias;
+
+
+
+
+
+function InsertarCategoria() {
+    
+	gConexionCategorias = CrearXmlHttp();
+
+	if (gConexionCategorias == null)
+	{
+	return;	
+	}
+
+	var nom_categoria = document.getElementById("txt_nombre_categoria").value;
+	var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
+	var lista = document.getElementsByName("lst_modalidades");
+	var seleccionados = "{";
+	for (var i = 0; i!=lista.length;i++)
+	{
+		if(lista[i].checked){
+			seleccionados += " " + lista[i].value;
+		} 
+	}	
+	seleccionados += " }";
+	gConexionCategorias.onreadystatechange = RespuestaInsertarCategoria;
+	gConexionCategorias.open("GET", "categorias/insertar/insertar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&lst_modalidades="+seleccionados, true);
+	gConexionCategorias.send(null);
+}
+
+
+function RespuestaInsertarCategoria()
+{
+    if (gConexionCategorias.readyState == 4)
+    {
+	if (gConexionCategorias.status == 200)
+	{
+		var respuesta = gConexionCategorias.responseText;
+		if (respuesta == "1") {
+			llamadaAsincronica('categorias/ver/ver','pagina');
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Inserción exitosa.</h2>";
+		} else if ( respuesta == "-1" ) {
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Inserción fallida: Nombre inválido, el nombre de la categoría ya existe.</h2>"
+
+		} else if ( respuesta == "-2" ) {
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Inserción fallida: Error de conexión con la base de datos.</h2>"
+		}
+
+	}
+    }
+}
+
+function cargar_form_modificar_categoria(id_categoria){
+document.getElementById("resultado").innerHTML = "";
+	llamadaAsincronica('categorias/ver/modificar_categoria?id_categoria='+id_categoria,'pagina');
+}
+
+function ModificarCategoria() {
+    
+	gConexionCategorias = CrearXmlHttp();
+
+	if (gConexionCategorias == null)
+	{
+	return;	
+	}
+
+	var id_categoria = document.getElementById("id_categoria").value;
+	var nom_categoria = document.getElementById("txt_nombre_categoria").value;
+	var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
+
+//quitar;
+	//var seleccionados = "{";
+	/*var lista = document.getElementsByName("lst_modalidades");
+	var seleccionados = "{";
+	for (var i = 0; i!=lista.length;i++)
+	{
+		if(lista[i].checked){
+			seleccionados += " " + lista[i].value;
+		} 
+	}	
+	seleccionados += " }";
+*/
+	gConexionCategorias.onreadystatechange = RespuestaModificarCategoria;
+	gConexionCategorias.open("GET", "categorias/ver/modificar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&id_categoria="+id_categoria, true);
+	gConexionCategorias.send(null);
+}
+
+
+function RespuestaModificarCategoria()
+{
+    if (gConexionCategorias.readyState == 4)
+    {
+	if (gConexionCategorias.status == 200)
+	{
+		var respuesta = gConexionCategorias.responseText;
+		if (respuesta == "-1") {
+			document.getElementById("resultado").innerHTML = "<<h2 style='color:#990000'>Modificación fallida: Ya existe una categoria con los mismos datos</h2>";
+			
+		} else if (respuesta == -2){
+			document.getElementById("resultado").innerHTML = "<<h2 style='color:#990000'>Modificación fallida: Error de conexión con la base de datos.</h2>";
+		} else {
+			llamadaAsincronica('categorias/ver/ver','pagina');
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Modificación exitosa.</h2>";
+		}
+	}
+    }
+}
+
+function CargarCategoria()
+{
+	gConexionCategorias = CrearXmlHttp();
+
+	if ( gConexionCategorias != null)
+	{
+		var id = document.getElementById("cmb_categorias");
+		if (id == null) {
+			id = "";
+		} else {
+			id = id.value;
+		}
+		gConexionCategorias.onreadystatechange = RespuestaCargarCategoria;
+		gConexionCategorias.open("GET", "categorias/modificar/modificar_categoria?id_categoria="+id, true);
+		gConexionCategorias.send(null);
+	}
+}
+
+
+function volver_ver_categorias(){
+document.getElementById("resultado").innerHTML = "";
+	llamadaAsincronica('categorias/ver/ver','pagina');
+}
+function RespuestaCargarCategoria()
+{
+    if (gConexionCategorias.readyState == 4)
+    {
+	if (gConexionCategorias.status == 200)
+	{
+	    document.getElementById("principal").innerHTML = gConexionCategorias.responseText;
+	    document.getElementById("resultado").innerHTML =  "";
+	}
+    }
+}
+
+
+
+

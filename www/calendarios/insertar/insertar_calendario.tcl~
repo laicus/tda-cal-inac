@@ -1,0 +1,40 @@
+ad_page_contract {
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+
+} -properties {
+}
+
+
+#Variables para guardar los datos del form
+set nom_categoria ""
+set dsc_categoria ""
+set res ""
+
+set lista_modalidades [td_inac_procs::seleccionar_modalidades]
+#------------------------------------------------------------------
+
+
+
+ad_form  -name formulario -mode edit -has_submit 1 -form {
+
+	{txt_anio:text(text),optional
+		{label "Año:"}
+		{html {rows 1 cols 50}}
+		{optional}
+	}
+
+
+
+
+}
+
+
+
+
+
+
+

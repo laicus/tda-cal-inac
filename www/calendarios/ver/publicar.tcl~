@@ -1,0 +1,51 @@
+ad_page_contract {
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	{id_calendario:notnull}
+
+} -properties {
+}
+
+
+set columnas {
+
+	nom_actividad {
+	  display_template { <left> <a href=\"javascript:cargar_form_ver_actividad('@actividades.id_actividad@','@actividades.es_especial@')"\>@actividades.nom_actividad@</a></left> }
+	  
+	}
+
+	fecha_inicio {
+	  label "Inicia (año-mes-día)"
+	}
+	fecha_final {
+	  label "Termina (año-mes-día)"
+	}
+
+	funcion {
+		label "Estado"
+		display_template { <if @actividades.estado_publicacion@ eq "No Publicada"><a href="javascript:cargar_form_publicar_actividad('@actividades.id_actividad@','@actividades.es_especial@')">Publicar</a></if><else><label>Publicada</label></else> }
+	} 
+
+	
+}
+
+template::list::create \
+    -name grid_actividades \
+    -multirow actividades \
+    -key id_actividad \
+    -elements $columnas \
+    -no_data "No existen actividades que actualizar." \
+     -html { style "width:100%" }
+
+td_calendarios::seleccionar_actividades_a_publicar_por_calendario -id_calendario $id_calendario -multirow actividades 
+
+ad_form -name calendario -has_submit 1 -form {
+    {calendario:integer(hidden) {value $id_calendario} {html {id "id_calendario"} } }
+}
+
+
+
+

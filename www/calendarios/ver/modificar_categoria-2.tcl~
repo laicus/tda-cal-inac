@@ -1,0 +1,20 @@
+ad_page_contract {
+
+    
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	nom_categoria:notnull
+	dsc_categoria:notnull
+	id_categoria:notnull
+
+} -properties {
+}
+
+set res [td_categorias::modificar_categoria -nom_categoria $nom_categoria -dsc_categoria $dsc_categoria -id_categoria $id_categoria -lst_modalidades_nuevas $lst_modalidades_nuevas]
+
+ns_write $res
+
+

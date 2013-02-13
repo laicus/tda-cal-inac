@@ -1,0 +1,56 @@
+ad_page_contract {
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+
+} -properties {
+}
+
+
+#Variables para guardar los datos del form
+set nom_categoria ""
+set dsc_categoria ""
+set res ""
+
+set lista_modalidades [td_inac_procs::seleccionar_modalidades]
+#------------------------------------------------------------------
+
+
+
+ad_form  -name formulario -mode edit -form {
+
+    {txt_nombre_categoria:text(text),optional
+    	{label "Nombre Categoria:"}
+    	{html {rows 1 cols 50}}
+	{optional}
+    }
+    {txt_descripcion_categoria:text(textarea),optional
+    	{label "Descripcion:"}
+    	{html {rows 2 cols 50}}
+	{optional}
+    }
+
+    {lst_modalidades:text(checkbox),multiple,optional
+    {label "Modalidades a las que se asocia esta categoria"}
+    #las opciones son listas de 2 (primer elemento se muestra, segundo es el "valor" de la opcion)
+    {options $lista_modalidades}
+	{optional}
+    {html {class lst_modalidades}}
+    }
+
+  	{aceptar:text(button)
+		{label ""}
+		{value "Crear Categoria"}
+		{html {onClick "javascript:InsertarCategoria();"}}
+	}
+
+}
+
+
+
+
+
+
+

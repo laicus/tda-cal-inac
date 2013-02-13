@@ -1,0 +1,12 @@
+
+<div>
+
+<div id = "pagina">
+	<include src="insertar_categoria">
+</div>
+<div id = "resultado">
+	
+</div>
+
+</div>
+

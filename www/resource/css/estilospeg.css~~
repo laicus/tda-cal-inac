@@ -1,0 +1,108 @@
+
+.bloqueCurso 
+{
+	background: url(../imagenes/fondoCurso.png);
+	background-repeat:no-repeat;
+	height: 75px;
+	width: 110px;
+	max-height:75px;
+	max-width:110px;
+	display:block;
+	padding: 10px 11px 5px 13px; 	
+}
+
+#bloqueCursoAprobado
+{
+	background: url(../imagenes/cursoAprobado.png);
+		background-repeat:no-repeat;
+	height: 75px;
+	width: 110px;
+	max-height:75px;
+	max-width:110px;
+	display:block;
+	padding: 10px 11px 5px 13px; 	
+}
+
+#bloqueCursoAprobadoRN
+{
+	background: url(../imagenes/cursoAprobadoRN.png);
+background-repeat:no-repeat;
+	height: 75px;
+	width: 110px;
+	max-height:75px;
+	max-width:110px;
+	display:block;
+	padding: 10px 11px 5px 13px; 	
+}
+
+#bloqueCursoCursando
+{
+	background: url(../imagenes/cursoCursando.png);
+background-repeat:no-repeat;
+	height: 75px;
+	width: 110px;
+	max-height:75px;
+	max-width:110px;
+	display:block;
+	padding: 10px 11px 5px 13px; 	
+}
+
+
+#bloqueCursoReprobado
+{
+	background: url(../imagenes/cursoReprobado.png);
+background-repeat:no-repeat;
+	height: 75px;
+	width: 110px;
+	max-height:75px;
+	max-width:110px;
+	display:block;
+	padding: 10px 11px 5px 13px; 	
+}
+
+#bloqueCursoSinCursar
+{
+	background: url(../imagenes/cursoSinLlevar.png);
+	background-repeat:no-repeat;
+	height: 75px;
+	width: 110px;
+	max-height:75px;
+	max-width:110px;
+	display:block;
+	padding: 10px 11px 5px 13px; 	
+}
+
+
+#bloqueCurso p
+{
+	font-family:Arial;
+	font-style:normal;
+	color:#9CFF9C;
+	text-align:center;
+	text-transform:capitalize;
+}
+
+
+#bloqueCurso a
+{
+	font-family:Arial;
+	font-style:normal;
+	color:#9CFF9C;
+	text-align:center;
+	text-decoration:none;
+	text-transform:lowercase;
+}
+
+
+#codCurso 
+{
+	font-size: 13px;
+	font-weight:bold;
+}
+
+
+#nombreCurso 
+{
+	font-size: 11px;
+	font-weight:normal;	
+}

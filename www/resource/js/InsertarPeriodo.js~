@@ -1,0 +1,36 @@
+
+var gConexionPeriodos;
+
+
+
+function InsertarPeriodo()
+{
+    gConexionPeriodos = CrearXmlHttp();
+
+    if ( gConexionPeriodos != null)
+    {
+
+	var id_modalidad = document.getElementById("cmb_modalidades").value;
+	var anio = document.getElementById("txt_anio").value;
+	var num_periodo = document.getElementById("txt_num_periodo").value;
+	var fecha_inicio = document.getElementById("fecha_inicio").value;
+	var fecha_final = document.getElementById("fecha_final").value;
+	var term_name = num_periodo + " " +document.getElementById("cmb_modalidades").options[document.getElementById("cmb_modalidades").selectedIndex].innerHTML;	
+
+	gConexionPeriodos.onreadystatechange = RespuestaInsertarPeriodo;
+	gConexionPeriodos.open("GET", "insertar?id_modalidad="+id_modalidad+"&anio="+anio+"&num_periodo="+num_periodo+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&term_name="+term_name, true);
+	gConexionPeriodos.send(null);
+   }
+}
+
+
+function RespuestaInsertarPeriodo()
+{
+    if (gConexionPeriodos.readyState == 4)
+    {
+	if (gConexionPeriodos.status == 200)
+	{
+	    document.getElementById("resultado").innerHTML = gConexionPeriodos.responseText;
+	}
+    }
+}

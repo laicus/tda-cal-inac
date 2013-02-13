@@ -1,0 +1,20 @@
+
+<div id = "encabezado">
+	<formtemplate id = "formulario"></formtemplate>
+	<table border="0" width="100%">
+	    <tr>
+	      <td>
+		<formtemplate id = "boton_cancelar"></formtemplate>
+	      </td>
+              <td>
+		<formtemplate id = "boton_aceptar"></formtemplate>
+	      </td>
+	    </tr>	     
+	  </table> 
+
+</div>
+<div id = "grid_resultados">
+	
+</div>
+
+

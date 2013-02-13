@@ -1,0 +1,26 @@
+ad_page_contract {
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	nom_categoria:notnull
+	dsc_categoria:notnull
+	lst_modalidades:notnull
+
+} -properties {
+}
+
+
+set res [td_categorias::insertar_categoria -nom_categoria $nom_categoria -dsc_categoria $dsc_categoria -lst_modalidades $lst_modalidades]
+
+	ns_write $res
+#if { $res == 1 } {
+#	ns_write "<h2 style='color:#000066'>Insercion exitosa.</h2>"
+#} elseif { $res == -1 } {
+#	ns_write "<h2 style='color:#990000'>Inserción fallida: Nombre inválido, el nombre de la categoria ya existe.</h2>"
+#} elseif { $res == -2 } {
+#	ns_write "<h2 style='color:#990000'>Inserción fallida:Inserción fallida: Error de conexión con la base de datos.</h2>"
+#}
+
+

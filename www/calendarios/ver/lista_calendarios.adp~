@@ -1,0 +1,19 @@
+<div class="portlet-header">
+	<div class="portlet-title-no-controls"> Calendarios </div>
+</div>
+
+<div class="form-button" align = "right">
+	<a href="javascript:llamadaAsincronica('calendarios/insertar/insertar_calendario','pagina')" title="Agregar" class="button">Agregar Calendario</a>
+
+</div>
+
+<center>
+<listtemplate name="grid_calendarios"></listtemplate>
+</center>
+<div class="form-button" align = "right">
+	<a href="javascript:llamadaAsincronica('calendarios/insertar/insertar_calendario','pagina')" title="Agregar" class="button">Agregar Calendario</a>
+
+</div>
+
+
+

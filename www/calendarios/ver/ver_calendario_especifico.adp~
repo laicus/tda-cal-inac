@@ -1,0 +1,8 @@
+<formtemplate id = "modalidad"></formtemplate>
+
+<br/>
+
+<div id = "modificar_actividades" >
+
+<listtemplate name="grid_actividades"></listtemplate>
+</div>

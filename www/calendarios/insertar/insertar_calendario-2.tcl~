@@ -1,0 +1,18 @@
+ad_page_contract {
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @creation-date 2009-01-13
+    @cvs-id $Id$
+
+} {
+	anio:notnull
+
+} -properties {
+}
+
+
+set res [td_calendarios::insertar_calendario -anio $anio]
+
+ns_write $res
+
+
+

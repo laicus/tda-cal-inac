@@ -1,0 +1,11 @@
+<formtemplate id = "calendario"></formtemplate>
+<div id= "menu" style = "background-color: #F7FBFF;">
+	<include src = "menu">
+</div>
+
+
+
+<div id= "actividades" >
+
+</div>
+

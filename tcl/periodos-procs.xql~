@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<queryset> 
+  <fullquery name="td_periodos::insertar_periodo.insertar_periodo"> 
+    <querytext> 
+        INSERT INTO td_admision_periodo(id_term, cod_modalidad, id_periodo, num_ano, id_calendario)
+	VALUES (:id_term, :id_modalidad, :num_periodo, :anio, :id_calendario);
+    </querytext>
+
+  </fullquery>
+  <fullquery name="td_periodos::insertar_periodo.insertar_term"> 
+    <querytext> 
+	INSERT INTO dotlrn_terms(term_name, term_year, start_date, end_date) 
+	VALUES (:term_name, :anio, :fecha_inicio, :fecha_final);
+    </querytext>
+  </fullquery> 
+
+<fullquery name="td_periodos::obtener_id_periodo.id_periodo">
+    <querytext>
+      select t.term_id
+      from dotlrn_terms t
+      where t.term_name = :nom_periodo and term_year = :anio
+    </querytext>
+  </fullquery>
+
+  <fullquery name="td_periodos::insertar_periodoxactividad.insertar_periodoxactividad"> 
+    <querytext> 
+	INSERT INTO td_cal_inac_periodosxactividades(id_periodo, id_actividad)
+        VALUES (:id_periodo, :id_actividad);
+    </querytext>
+  </fullquery> 
+
+  <fullquery name="td_periodos::verificar_periodo.existe_periodo">
+    <querytext>
+      select td_admision_periodo.id_term
+      from td_admision_periodo
+      where cod_modalidad = :cod_modalidad
+      and id_periodo = :num_periodo
+      and num_ano = :num_ano
+
+    </querytext>
+  </fullquery>
+
+  <fullquery name="td_periodos::modificar_periodo.modificar_periodo">
+    <querytext>
+	UPDATE td_admision_periodo
+	   	SET cod_modalidad=:id_modalidad, id_periodo = :num_periodo, num_ano=:anio
+	 	WHERE id_term = :id_periodo;
+	
+    </querytext>
+  </fullquery>
+
+  <fullquery name="td_periodos::lista_periodos_por_modalidad.cantidad_de_periodos">
+    <querytext>
+SELECT can_periodos
+  FROM td_modalidades where id_modalidad = :id_modalidad;
+    </querytext>
+  </fullquery>
+
+
+</queryset> 
+
+
+
+

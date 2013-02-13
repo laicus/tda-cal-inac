@@ -1,0 +1,11 @@
+
+<div id = "resultado">
+
+</div>
+<hr/>
+<div class="portlet" id = "pagina">
+
+	<include src="ver">
+</div>
+
+

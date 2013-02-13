@@ -1,0 +1,30 @@
+<formtemplate id = "actividad"></formtemplate>
+
+<div class="portlet-header">
+<div class="portlet-title-no-controls"> Modificar Actividad. </div>
+</div>
+<div class="portlet" id = "pagina">
+	<div id="viewadp-cal-table" class="margin-form margin-form-div">
+		<div class="form-item-wrapper">
+			<div id="contenedor_frm_seccion_general">
+				<formtemplate id = "frm_seccion_general"></formtemplate>
+			</div>
+			<div id="contenedor_frm_seccion_periodos">
+				<formtemplate id = "frm_seccion_periodos"></formtemplate>
+			</div>
+			<div id="contenedor_frm_seccion_categorias">
+				<formtemplate id = "frm_seccion_categorias"></formtemplate>
+			</div>
+			<div id="contenedor_formularioEncabezado">
+				<formtemplate id = "formularioEncabezado"></formtemplate>
+			</div>
+		</div>
+		<div class="form-item-wrapper">
+			<div class="form-button">
+				<a href="javascript:volver_ver_actividades();" title="Volver" class="button">Volver</a>
+				<a href="javascript:modificar_actividad();" title="Modificar" class="button">Modificar</a>
+			</div>
+		</div>
+	</div>
+</div>
+

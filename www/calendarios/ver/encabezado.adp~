@@ -1,0 +1,6 @@
+<h2 style='color:#000066'>¿Está seguro que desea eliminar este calendario?</h2>
+		<div class="form-button">
+			<a href="javascript:EliminarCalendario();" title="Si" class="button">Si</a>	
+			<a href="javascript:volver_ver_calendarios();" title="No" class="button">No</a>
+			<a href="javascript:volver_ver_calendarios();" title="Cancelar" class="button">Cancelar</a>			
+		</div>

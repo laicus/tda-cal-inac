@@ -1,0 +1,11 @@
+
+
+<listtemplate name="grid_categorias"></listtemplate>
+
+<div class="form-button">
+	<a href="javascript:llamadaAsincronica('categorias/insertar/insertar_categoria','pagina')" title="Agregar" class="button">Agregar Categoria</a>
+
+</div>
+
+
+

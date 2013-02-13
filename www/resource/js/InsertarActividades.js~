@@ -1,0 +1,155 @@
+
+
+var gConexionActividades;
+
+
+function submit_actividades(){
+ 	gConexionActividades = CrearXmlHttp();
+	gConexionActividades.onreadystatechange = respuesta_submit_actividades;
+	gConexionActividades.open("GET", "actividades/insertar/submit_actividades", true);
+	gConexionActividades.send(null);
+
+}
+
+function respuesta_submit_actividades()
+{
+    if (gConexionActividades.readyState == 4)
+    {
+	if (gConexionActividades.status == 200)
+	{
+	    
+		var respuesta = gConexionActividades.responseText;
+	   
+		
+		if (respuesta == "1") {
+			llamadaAsincronica("actividades/ver/ver", "pagina");
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>El calendario se ha actualizado correctamente.</h2>";
+		} else if ( respuesta == "-1" ) {
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>";
+
+		} 
+
+
+	}
+    }
+}
+
+
+
+function InsertarActividad(){	
+
+    gConexionActividades = CrearXmlHttp();
+
+    if (gConexionActividades == null)
+    {
+	return;	
+    }
+    
+
+	var nom_actividad = document.getElementById("txt_nombre_actividad").value;
+	var nom_modalidad = document.getElementById("cmb_modalidades").options[document.getElementById("cmb_modalidades").selectedIndex].innerHTML;
+	var nom_periodo = document.getElementById("cmb_periodos").value;
+	
+	if (nom_periodo == "") {
+		nom_periodo = "No Aplica";
+	} else {
+		var nom_periodo = document.getElementById("cmb_periodos").options[document.getElementById("cmb_periodos").selectedIndex].innerHTML;
+	}
+
+	var nom_categoria = document.getElementById("cmb_categorias").options[document.getElementById("cmb_categorias").selectedIndex].innerHTML;
+	var fecha_inicio = document.getElementById("fecha_inicio").value;
+	var fecha_final = document.getElementById("fecha_final").value;
+	var dsc_actividad = document.getElementById("txt_dsc_actividad").value;
+
+
+//validaciones 
+
+	if ( fecha_inicio > fecha_final ){
+
+		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Fechas inválidas, la fecha de inicio debe ser menor a la de finalización.</h2>";
+
+	} else if( nom_actividad.length == 0 ){
+
+		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: El nombre de la actividad es inválido.</h2>";
+
+	} else if( nom_actividad.length > 500 ){
+
+		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: El nombre de la actividad es inválido.No puede tener mas de 500 carácteres.</h2>";
+
+	} else if( dsc_actividad.length != 0 && dsc_actividad.length > 500 ){
+
+		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: La descripción de la actividad es inválida.No puede tener mas de 500 carácteres.</h2>";
+
+	} else {
+
+		var url = "actividades/insertar/grid_actividades?nom_actividad="+nom_actividad +"&dsc_actividad="+dsc_actividad+"&nom_modalidad="+nom_modalidad+"&nom_periodo="+nom_periodo+"&nom_categoria="+nom_categoria+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&accion=insertar";
+
+		gConexionActividades.onreadystatechange = respuesta_insertar_actividad_temporal;
+		gConexionActividades.open("GET", url, true);
+		gConexionActividades.send(null);
+
+	}
+}
+
+
+function respuesta_insertar_actividad_temporal()
+{
+
+    if (gConexionActividades.readyState == 4)
+    {
+	if (gConexionActividades.status == 200)
+	{
+		var respuesta = gConexionActividades.responseText;
+		
+	   	document.getElementById("grid_actividades").innerHTML = respuesta;
+		document.getElementById("resultado").innerHTML = document.getElementById("mensaje").value;
+
+	}
+    }
+}
+
+
+function eliminar_actividad_temporal(id_actividad)
+{
+    gConexionActividades = CrearXmlHttp();
+
+    if (gConexionActividades == null)
+    {
+	return;	
+    }
+
+	var url = "actividades/insertar/grid_actividades?accion=eliminar"+"&id_actividad="+id_actividad;
+
+	gConexionActividades.onreadystatechange = respuesta_insertar_actividad_temporal;
+	gConexionActividades.open("GET", url, true);
+
+ gConexionActividades.send(null);
+}
+
+
+function validar_modalidad()
+{
+	var nom_modalidad = document.getElementById("cmb_modalidades").options[document.getElementById("cmb_modalidades").selectedIndex].innerHTML;
+	if (nom_modalidad != "Bimestre" && nom_modalidad != "Cuatrimestre" && nom_modalidad != "Verano" && nom_modalidad != "Semestre") {
+		document.getElementById("cmb_categorias").value = 70;
+		document.getElementById("cmb_categorias").disabled = true;
+	}else{
+		document.getElementById("cmb_categorias").disabled = false;
+	}
+}
+
+function cargar_form_insertar_actividad(){
+	document.getElementById("resultado").innerHTML = "";
+	llamadaAsincronica('actividades/insertar/insertar_actividad','pagina');
+}
+
+ 
+
+
+
+
+
+
+
+
+

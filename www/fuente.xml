@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Menu Nombre = "Administracion" Altura = "300" Autofit = "false">
+  <Hijo titulo = "Información general" UrlDestino = "javascript:llamadaAsincronica('informacionGeneral','recuadro_centro');" seleccionado = "true"></Hijo>
+  <Hijo titulo = "Categorías" UrlDestino = "javascript:llamadaAsincronica('categorias/ver/pagina','recuadro_centro');" seleccionado = "false"></Hijo>
+  <Hijo titulo = "Calendarios" UrlDestino = "javascript:llamadaAsincronica('calendarios/ver/pagina','recuadro_centro');" seleccionado = "false"></Hijo>
+  <Hijo titulo = "Períodos" UrlDestino = "javascript:llamadaAsincronica('periodos/ver/pagina?accion=ver','recuadro_centro');" seleccionado = "false"></Hijo>
+  <Hijo titulo = "Actividades" UrlDestino = "javascript:llamadaAsincronica('actividades/ver/pagina','recuadro_centro');" seleccionado = "false"></Hijo>
+</Menu>
+	

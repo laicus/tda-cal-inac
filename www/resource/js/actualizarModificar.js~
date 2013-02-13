@@ -1,0 +1,80 @@
+
+function actualizarModificarEspecifica(){
+	
+	var id = document.getElementById("categorias").value;
+	var url = "modificar_categoria_especifica?id_categoria="+id;
+	ajaxpage(url,'modificar');
+}
+
+
+//-------------------------------Variables-----------------------------
+
+var gConexionSalas;
+
+//------------------------------CrearXmlHttp---------------------------
+function CrearXmlHttp()
+{
+    var lConexion = null;
+
+    try
+    {
+	// Firefox, Opera 8.0+, Safari
+	lConexion = new XMLHttpRequest();
+    }
+    catch (ef)
+    {
+	// Internet Explorer
+	try
+        {
+	    lConexion = new ActiveXObject("Msxml2.XMLHTTP");
+	}
+	catch (ei)
+	{
+	    lConexion = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+    }
+    return lConexion;
+}
+
+
+//------------------------------Eventos para incluir salas---------------------------------
+//cuando se preciona el boton incluir sala debe actualizar la vista
+//-----------------------------------------------------------------------------------------
+
+function ActualizarCategoria() {
+    
+    gConexionSalas = CrearXmlHttp();
+
+    if (gConexionSalas == null)
+    {
+	return;	
+    }
+    
+    var nom_categoria = document.getElementById("txt_nombre_categoria").value;
+    var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
+    var id = document.getElementById("categorias").value;
+	gConexionSalas.onreadystatechange = RespuestaCargarSalas;
+
+	gConexionSalas.open("GET", "modificar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&id_categoria="+id, true);
+
+	gConexionSalas.send(null);
+}
+
+
+function RespuestaCategorias()
+{
+    if (gConexionSalas.readyState == 4)
+    {
+	if (gConexionSalas.status == 200)
+	{
+	    ajaxpage('http://localhost:8000/tda-cal-inac/categorias/modificar/modificar_categoria','principal');
+	}
+    }
+
+}
+
+
+
+
+
+

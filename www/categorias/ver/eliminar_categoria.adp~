@@ -1,0 +1,34 @@
+<formtemplate id = "categoria"></formtemplate>
+
+<div class="portlet-header">
+	<div class="portlet-title-no-controls"> Eliminar Categoría. </div>
+</div>
+<div class="portlet" id = "pag">
+<div id="viewadp-cal-table" class="margin-form margin-form-div">
+	<div class="form-item-wrapper">
+			
+			<div class="form-label">
+				<strong>Nombre:</strong>
+			</div>
+			<div class="form-widget">                  
+				@nom_categoria@
+			</div>	  
+		</div>
+		<div class="form-item-wrapper">
+			<div class="form-label">
+				<strong>Descripción:</strong>
+			</div>
+
+			<div class="form-widget">                  
+				@dsc_categoria;noquote@
+			</div>  
+		</div>
+
+</div>
+<h2 style='color:#000066'>¿Esta seguro que desea eliminar esta categoría?</h2>
+
+		<div class="form-button">
+			<a href="javascript:EliminarCategoria();" title="Si" class="button">Si</a>	
+			<a href="javascript:volver_ver_categorias();" title="No" class="button">No</a>
+		</div>
+</div>

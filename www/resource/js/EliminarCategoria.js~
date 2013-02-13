@@ -1,0 +1,55 @@
+
+//-------------------------------Variables-----------------------------
+
+var gConexionEliminar;
+
+
+
+
+function cargar_form_eliminar_categoria(id_categoria){
+	document.getElementById("resultado").innerHTML = ""
+	llamadaAsincronica("categorias/ver/eliminar_categoria?id_categoria="+id_categoria, "pagina");
+
+}
+
+function EliminarCategoria() {
+    
+	gConexionEliminar = CrearXmlHttp();
+
+	if (gConexionEliminar == null)
+	{
+		return;	
+	}
+
+	var id = document.getElementById("id_categoria").value;
+	gConexionEliminar.onreadystatechange = RespuestaEliminarCategoria;
+	gConexionEliminar.open("GET", "categorias/eliminar/eliminar_categoria-2?id_categoria="+id, true);
+	gConexionEliminar.send(null);
+}
+
+
+function RespuestaEliminarCategoria()
+{
+    if (gConexionEliminar.readyState == 4)
+    {
+	if (gConexionEliminar.status == 200)
+	{
+		var respuesta = gConexionEliminar.responseText;
+		if (respuesta == "1") {
+			llamadaAsincronica("categorias/ver/ver", "pagina");
+			document.getElementById("resultado").innerHTML =  "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
+		} else if ( respuesta == "-1" ) {
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Esta categoría está asociada a una o más actividades, por lo cual no se puede eliminar.</h2>"
+
+		} else if ( respuesta == "-2" ) {
+			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>"
+		}
+
+	}
+    }
+
+}
+
+
+
+
