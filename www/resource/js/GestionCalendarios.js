@@ -39,7 +39,7 @@ function RespuestaInsertarCalendario()
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Inserción fallida: Ya existe un calendario para este año.</h2>";
 		} else {
 		    // En caso de exito carga la pagina principal
-			llamadaAsincronica('calendarios/ver/ver','pagina');
+			cargarURL('calendarios/ver/ver','pagina');
 			// Manda un mensaje de concluido con exito
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Inserción exitosa.</h2>";
 		}
@@ -89,7 +89,7 @@ function RespuestaModificarCalendario()
 		} else if (respuesta == -2){
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Modificación fallida: Error de conexión con la base de datos.</h2>";
 		} else {
-			llamadaAsincronica('calendarios/ver/ver','pagina');
+			cargarURL('calendarios/ver/ver','pagina');
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Modificación exitosa.</h2>";
 		}
 	}
@@ -134,7 +134,7 @@ function RespuestaEliminarCalendario()
 	{
 		var respuesta = gConexionCalendario.responseText;
 		if (respuesta == "1") {
-			llamadaAsincronica("calendarios/ver/ver", "pagina");
+			cargarURL("calendarios/ver/ver", "pagina");
 			document.getElementById("resultado").innerHTML =  "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
 		} else if ( respuesta == "-1" ) {
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>" 			} else if ( respuesta == "-2" ) {
@@ -194,7 +194,7 @@ function RespuestaCopiarCalendario()
 		} else if (respuesta == -2){
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Copia fallida: Error de conexión con la base de datos.</h2>";
 		} else {
-			llamadaAsincronica('calendarios/ver/ver','pagina');
+			cargarURL('calendarios/ver/ver','pagina');
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Copia exitosa.</h2>";
 		}
 	}
@@ -231,7 +231,7 @@ function RespuestaPublicarCalendario()
 		} else if (respuesta == -2){
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Modificación fallida: Error de conexión con la base de datos.</h2>";
 		} else {
-			llamadaAsincronica('calendarios/ver/ver','pagina');
+			cargarURL('calendarios/ver/ver','pagina');
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Publicación exitosa.</h2>";
 		}
 	}
@@ -242,47 +242,48 @@ function RespuestaPublicarCalendario()
 
 function cargar_form_modificar_calendario(id_calendario,anio,fecha_publicacion){
 	document.getElementById("resultado").innerHTML = "";
-	llamadaAsincronica('calendarios/ver/modificar_calendario?id_calendario='+id_calendario + '&anio='+anio+'&fecha_publicacion='+fecha_publicacion,'pagina');
+	cargarURLParametro('calendarios/ver/modificar_calendario?', 'id_calendario='+id_calendario + '&anio='+anio+'&fecha_publicacion='+fecha_publicacion, 'pagina');
 }
 
 
 function cargar_form_copiar_calendario(){
 	document.getElementById("resultado").innerHTML = ""
-	llamadaAsincronica("calendarios/insertar/copiar_calendario", "pagina");
+	cargarURL("calendarios/insertar/copiar_calendario", "pagina");
 }
 
 function cargar_form_eliminar_calendario(id_calendario){
 	document.getElementById("resultado").innerHTML = ""
-	llamadaAsincronica("calendarios/ver/eliminar_calendario?id_calendario="+id_calendario, "pagina");
+	cargarURLParametro("calendarios/ver/eliminar_calendario?", "id_calendario="+id_calendario, "pagina");
 
 }
 
 function cargar_form_publicar_calendario(id_calendario){
 	document.getElementById("resultado").innerHTML = "";
 
-	llamadaAsincronica("calendarios/ver/publicar?id_calendario="+id_calendario, "pagina");
+	cargarURLParametro("calendarios/ver/publicar?", "id_calendario="+id_calendario, "pagina");
 
 }
 
 function volver_ver_calendarios(){
 	document.getElementById("resultado").innerHTML = "";
-	llamadaAsincronica('calendarios/ver/ver','pagina');
+	cargarURL('calendarios/ver/ver','pagina');
 }
 
 function cargar_form_modificar_actividades(){
 	var id_calendario = document.getElementById("id_calendario").value;
-	//llamadaAsincronica("calendarios/ver/menu", "sub_menu");
+	//cargarURL("calendarios/ver/menu", "sub_menu");
 	
-	llamadaAsincronica("calendarios/ver/ver_actividades_de_calendario?id_calendario="+id_calendario, "modificar_actividades");
+	cargarURLParametro("calendarios/ver/ver_actividades_de_calendario?", "id_calendario="+id_calendario, "modificar_actividades");
 
 }
 
 function cargar_form_modificar_actividad_calendario(id_actividad,es_especial)
 {
 
-	var url = "calendarios/ver/modificar_actividad?id_actividad="+id_actividad +"&es_especial="+es_especial;
+	var url = "calendarios/ver/modificar_actividad?";
+	var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
 	document.getElementById("resultado").innerHTML =  "";
-	llamadaAsincronica(url,'modificar_actividades');
+	cargarURLParametro(url, parametros, 'modificar_actividades');
 }
 
 function cargar_form_ver_calendario(id_calendario){
@@ -327,7 +328,7 @@ function RespuestaCargarFormVerCalendario()
 	{
 		document.getElementById("pagina").innerHTML = gConexionCalendario.responseText;
 		var id_calendario = document.getElementById("id_calendario").value;
-		llamadaAsincronica("calendarios/ver/ver_todas_las_actividades_de_calendario?id_calendario="+id_calendario,'actividades');
+		cargarURLParametro("calendarios/ver/ver_todas_las_actividades_de_calendario?", "id_calendario="+id_calendario,'actividades');
 		document.getElementById("todas").innerHTML = "<a style='color:#0000CC'>Todas</a>";
 	}
     }
@@ -369,9 +370,9 @@ function cargar_ver_calendario(id_modalidad){
 	
 
 	if (id_modalidad == 'todas'){
-		llamadaAsincronica("calendarios/ver/ver_todas_las_actividades_de_calendario?id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
+		cargarURLParametro("calendarios/ver/ver_todas_las_actividades_de_calendario?" , "id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
 	} else {
-		llamadaAsincronica("calendarios/ver/ver_calendario_especifico?id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
+		cargarURLParametro("calendarios/ver/ver_calendario_especifico?", "id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
 	}
 
 }

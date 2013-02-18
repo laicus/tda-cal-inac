@@ -1,6 +1,7 @@
 #tda-inac-procs.tcl
 ad_library {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
+    @author Virgilio Solis Rojas (vsolisrojas@gmail.com) 
+    @author Ederick Navas (enavas@itcr.ac.cr)
     @creation-date 2009-01-19
     @cvs-id $Id$
 }
@@ -13,19 +14,24 @@ namespace eval ::td_inac_procs {}
 # ===========================================================
 
 ad_proc -public td_inac_procs::seleccionar_modalidades {
+	
 } {
     Devuelve la lista de las modalidades disponibles
+    #Modificado por Ederick Navas (enavas@itcr.ac.cr)
 } {
+	
     #return [concat [td_periodo::modalidades_disponibles] {{NO APLICA NA}}]
     #Crea una variable de lista vacia
-    set lista [list]
+    #set lista [list]
     #Carga la lista de modalidades
-    set periodos [td_periodo::modalidades_disponibles]
+    #set periodos [td_periodo::modalidades_disponibles]
+    #set periodos [db_list_of_lists seleccionar_modalidades_para_periodos {}]
     #Por cada modalidad quita deja el codigo como solo una letra
-    foreach periodo $periodos {
-        lappend lista [list [lindex $periodo 0] [lindex [split [lindex $periodo 1] .] 0]]
-    }
-    return $lista
+    #foreach periodo $periodos {
+    #    lappend lista [list [lindex $periodo 0] [lindex [split [lindex $periodo 1] .] 0]]
+    #}
+    
+    return [db_list_of_lists seleccionar_modalidades {}]
 }
 
 ad_proc -public td_inac_procs::seleccionar_modalidades_para_periodos {

@@ -5,13 +5,13 @@ function cargar_form_modificar_periodo(id_periodo,cod_modalidad)
 {	
 	document.getElementById("resultado").innerHTML =  "";
 	var url = "periodos/ver/modificar_periodo?id_periodo="+id_periodo + "&id_modalidad=" + cod_modalidad;
-	llamadaAsincronica(url,'pagina');
+	cargarURL(url,'pagina');
 }
 
 function cargar_form_agregar_periodo()
 {	
 	document.getElementById("resultado").innerHTML =  "";
-	llamadaAsincronica('periodos/insertar/insertar_periodo','pagina');
+	cargarURL('periodos/insertar/insertar_periodo','pagina');
 } 
 
 
@@ -55,7 +55,7 @@ function RespuestaModificarPeriodo ()
 var respuesta = gConexionPeriodos.responseText;
 		if (respuesta == "1") {
 			document.getElementById("resultado").innerHTML =  "<h2 style='color:#000066'>Modificación exitosa.</h2>";
-			llamadaAsincronica("periodos/ver/ver", "pagina");
+			cargarURL("periodos/ver/ver", "pagina");
 
 		} else if ( respuesta == "-1" ) {
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>La modificación no se pudo realizar, debido a que ya existe un período con estos datos.</h2>"
@@ -73,7 +73,7 @@ var respuesta = gConexionPeriodos.responseText;
 
 function volver_ver_periodos(){
 	document.getElementById("resultado").innerHTML =  "";
-	llamadaAsincronica('periodos/ver/ver','pagina');
+	cargarURL('periodos/ver/ver','pagina');
 }
 
 //------------------------------Nuevo---------------------------
@@ -85,7 +85,7 @@ function cargar_periodos () {
 	var id_calendario = document.getElementById("cmb_calendarios").value;
 	document.getElementById("resultado").innerHTML =  "";
 	var url = "periodos/ver/resultados?id_modalidad="+ id_modalidad +"&id_calendario="+id_calendario;
-	llamadaAsincronica(url,'resultados');
+	cargarURL(url,'resultados');
 }
 
 function InsertarPeriodo()
@@ -122,7 +122,7 @@ function RespuestaInsertarPeriodo()
 	{
 		var respuesta = gConexionPeriodos.responseText;
 		if (respuesta == "1") {
-			llamadaAsincronica("periodos/ver/ver", "pagina");
+			cargarURL("periodos/ver/ver", "pagina");
 			document.getElementById("resultado").innerHTML =  "<h2 style='color:#000066'>Inserción exitosa.</h2>";
 		} else if ( respuesta == "-1" ) {
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>La inserción no se pudo realizar, debido a que ya existe un período con estos datos.</h2>"

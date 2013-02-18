@@ -45,7 +45,7 @@ function RespuestaInsertarCategoria()
 	    // Si la respuesta es exitosa
 	    if (respuesta == "1") {
 	        //Carga la pagina de categorias
-		    llamadaAsincronica('categorias/ver/ver','pagina');
+		    cargarURL('categorias/ver/ver','pagina');
 		    document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Inserción exitosa.</h2>";
 	    } else if ( respuesta == "-1" ) {
 	        //Si la categoria ya existe. Despliega un mensaje de error
@@ -63,7 +63,7 @@ function cargar_form_modificar_categoria(id_categoria){
     //Limpia el elemento resultado
     document.getElementById("resultado").innerHTML = "";
     //Carga la pagina para modificar la categoria
-	llamadaAsincronica('categorias/ver/modificar_categoria?id_categoria='+id_categoria,'pagina');
+	 cargarURLParametro('categorias/ver/modificar_categoria?', 'id_categoria='+id_categoria, 'pagina');
 }
 
 //Funcion para modificar categoria
@@ -99,7 +99,7 @@ function RespuestaModificarCategoria()
     if ((gConexionCategorias.readyState == 4) && (gConexionCategorias.status == 200))
 	{
 	    //Realiza la llama a la pagina
-		llamadaAsincronica('categorias/ver/ver','pagina');
+		 cargarURL('categorias/ver/ver','pagina');
 		//Mensaje de respuesta
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Modificación exitosa.</h2>";
     }
@@ -127,7 +127,7 @@ function volver_ver_categorias(){
     //Guarda vacio en el resultado
     document.getElementById("resultado").innerHTML = "";
     //Carga el elemento página con la página ver
-	llamadaAsincronica('categorias/ver/ver','pagina');
+	 cargarURL('categorias/ver/ver','pagina');
 }
 
 function RespuestaCargarCategoria()
@@ -146,7 +146,7 @@ function RespuestaCargarCategoria()
 
 function cargar_form_eliminar_categoria(id_categoria){
 	document.getElementById("resultado").innerHTML = ""
-	llamadaAsincronica("categorias/ver/eliminar_categoria?id_categoria="+id_categoria, "pagina");
+	 cargarURLParametro("categorias/ver/eliminar_categoria?", "id_categoria="+id_categoria, "pagina");
 
 }
 
@@ -183,7 +183,7 @@ function RespuestaEliminarCategoria()
 		//Si la respuesta es correcta
 		if (respuesta == "1") {
 		    //Carga la lista
-			llamadaAsincronica("categorias/ver/ver", "pagina");
+			 cargarURL("categorias/ver/ver", "pagina");
 			//Carga un mensaje
 			document.getElementById("resultado").innerHTML =  "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
 		// Si la respuesta no es correcta

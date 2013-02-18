@@ -17,13 +17,13 @@
     
   <fullquery name="td_categorias::seleccionar_categorias_por_modalidad.seleccionar_categorias_por_modalidad"> 
     <querytext> 
-   	select td_cal_inac_categorias.nom_categoria, td_cal_inac_categorias.id_categoria 
-   	from td_cal_inac_categorias
-	    inner join td_cal_inac_modalidadesxcategorias 
-	    on td_cal_inac_categorias.id_categoria = td_cal_inac_modalidadesxcategorias.id_categoria
-	        inner join td_cal_inac_modalidades 
-	        on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxcategorias.id_modalidad
-	where td_cal_inac_modalidades.id_modalidad = :id_modalidad
+   	select td_sch_cal_inac.categoria .nom_categoria, td_sch_cal_inac.categoria.id_categoria 
+   	from td_sch_cal_inac.categoria 
+	    inner join td_sch_cal_inac.modalidad_categoria
+	    on td_sch_cal_inac.categoria.id_categoria = td_sch_cal_inac.modalidad_categoria.id_categoria
+	        inner join td_sch_cal_inac.modalidad 
+	        on td_sch_cal_inac.modalidad.id_modalidad = td_sch_cal_inac.modalidad_categoria.id_modalidad
+	where td_sch_cal_inac.modalidad.id_modalidad = :id_modalidad
     </querytext> 
   </fullquery>  
 
@@ -38,21 +38,21 @@
   <fullquery name="td_categorias::seleccionar_categorias.seleccionar_categorias"> 
     <querytext> 
         SELECT nom_categoria, id_categoria, dsc_categoria 
-        FROM td_cal_inac_categorias 
-        order by especial, nom_categoria
+        FROM td_sch_cal_inac.categoria 
+        order by nom_categoria;
     </querytext> 
   </fullquery>
   <fullquery name="td_categorias::seleccionar_categorias_para_grid.seleccionar_categorias"> 
     <querytext> 
         SELECT nom_categoria, id_categoria, dsc_categoria 
-        FROM td_sch_cal_inac.categoria
-        order by especial, nom_categoria;
+        FROM td_sch_cal_inac.categoria 
+        order by nom_categoria;
     </querytext> 
   </fullquery>
   
   <fullquery name="td_categorias::modificar_categoria.modificar_categoria"> 
     <querytext> 
-	    UPDATE td_sch_cal_inac.categoria
+	    UPDATE td_sch_cal_inac.categoria 
 	    SET nom_categoria = :nom_categoria, dsc_categoria = :dsc_categoria 
 	    WHERE id_categoria = :id_categoria;
     </querytext> 
@@ -75,7 +75,7 @@
   <fullquery name="td_categorias::eliminar_categoria.existe_actividad_con_categoria"> 
     <querytext> 
 	    select distinct(1) 
-	    from td_cal_inac_actividades 
+	    from td_sch_cal_inac.actividad 
 	    where id_categoria = :id_categoria
     </querytext> 
   </fullquery> 
@@ -89,9 +89,9 @@
 
   <fullquery name="td_categorias::seleccionar_modalidades.seleccionar_modalidades"> 
     <querytext> 
-        SELECT id_modalidad, nom_modalidad, can_periodos 
-        FROM td_cal_inac_modalidades 
-        order by es_especial
+        SELECT id_modalidad, nom_modalidad
+        FROM td_sch_cal_inac.modalidad;
+        
     </querytext> 
   </fullquery>
 
@@ -104,7 +104,7 @@
 
   <fullquery name="td_categorias::modificar_categoria.eliminar_categoria_modalidad"> 
     <querytext> 
-        DELETE FROM td_cal_inac_modalidadesxcategorias 
+        DELETE FROM td_sch_cal_inac.modalidad_categoria 
         WHERE id_categoria = :id_categoria
     </querytext> 
   </fullquery>
@@ -163,8 +163,8 @@
 
  <fullquery name="td_categorias::modificar_actividad.validar_actividad_con_no_temporales"> 
     <querytext> 
-	    select td_cal_inac_actividades.id_actividad 
-	    from td_cal_inac_actividades 
+	    select td_sch_cal_inac.actividad.id_actividad 
+	    from td_sch_cal_inac.actividad 
 	        inner join td_cal_inac_periodosxactividades
 	        on td_cal_inac_periodosxactividades.id_actividad = td_cal_inac_actividades.id_actividad
 	            inner join td_admision_periodo 

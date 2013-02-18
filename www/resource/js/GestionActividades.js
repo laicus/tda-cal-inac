@@ -37,11 +37,11 @@ function RespuestaPublicarActividad()
 			var respuesta = gConexionActividades.responseText;
 			if (respuesta == "1") {
 				if (document.getElementById("id_calendario") == null){
-					llamadaAsincronica("actividades/ver/ver?id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+					cargarURLParametro("actividades/ver/ver?", "id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
 				}else {
 					var id_calendario = document.getElementById("id_calendario").value;
 				
-					llamadaAsincronica("calendarios/ver/publicar?id_calendario="+id_calendario, "modificar_actividades");	
+					cargarURLParametro("calendarios/ver/publicar?", "id_calendario="+id_calendario, "modificar_actividades");	
 				}
 				document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Publicación exitosa.</h2>";
 			} else if ( respuesta == "-1" ) {
@@ -76,11 +76,11 @@ function RespuestaDesPublicarActividad()
 			var respuesta = gConexionActividades.responseText;
 			if (respuesta == "1") {
 				if (document.getElementById("id_calendario") == null){
-					llamadaAsincronica("actividades/ver/ver?id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+					cargarURLParametro("actividades/ver/ver?", "id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
 				}else {
 					var id_calendario = document.getElementById("id_calendario").value;
 				
-					llamadaAsincronica("calendarios/ver/publicar?id_calendario="+id_calendario, "modificar_actividades");	
+					cargarURLParametro("calendarios/ver/publicar?", "id_calendario="+id_calendario, "modificar_actividades");	
 				}
 				document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Transacción exitosa.</h2>";
 			} else if ( respuesta == "-1" ) {
@@ -128,12 +128,12 @@ alert("entra a RespuestaEliminarActividad");
 alert("respuesta fue 1");
 
 			if (document.getElementById("id_calendario") == null){
-				llamadaAsincronica("actividades/ver/ver?id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+				cargarURLParametro("actividades/ver/ver?", "id_categoria="+ id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
 			}else {
 				var id_calendario = document.getElementById("id_calendario").value;
 
 alert("Entro pq calendario NO es nulo.... va para calendarios/ver/ver_actividades_de_calendario a modificar_actividades..... RARO....")				
-				llamadaAsincronica("calendarios/ver/ver_actividades_de_calendario?id_calendario="+id_calendario, "modificar_actividades");	
+				cargarURLParametro("calendarios/ver/ver_actividades_de_calendario?", "id_calendario="+id_calendario, "modificar_actividades");	
 			}
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
 		} else if ( respuesta == "-1" ) {
@@ -211,10 +211,10 @@ function RespuestaModificarActividad ()
 		var respuesta = gConexionActividades.responseText;
 		if (respuesta == "1") {
 			if (document.getElementById("id_calendario") == null){
-				llamadaAsincronica("actividades/ver/ver?id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+				cargarURLParametro("actividades/ver/ver?", "id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
 			}else {
 				var id_calendario = document.getElementById("id_calendario").value;
-				llamadaAsincronica("calendarios/ver/ver_actividades_de_calendario?id_calendario="+id_calendario, "modificar_actividades");	
+				cargarURLParametro("calendarios/ver/ver_actividades_de_calendario?", "id_calendario="+id_calendario, "modificar_actividades");	
 			}
 			
 			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Modificación exitosa.</h2>";
@@ -250,7 +250,7 @@ function respuesta_submit_actividades()
 		{ 
 			var respuesta = gConexionActividades.responseText;
 			if (respuesta == "1") {
-				llamadaAsincronica("actividades/ver/ver?id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+				cargarURLParametro("actividades/ver/ver?", "id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
 				document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>El calendario se ha actualizado correctamente.</h2>";
 			} else if ( respuesta == "-1" ) {
 				document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>";
@@ -375,25 +375,25 @@ function validar_modalidad()
 function volver_ver_actividades() {
 	if (document.getElementById("id_calendario") == null){	
 		id_calendario = 0;	
-		llamadaAsincronica("actividades/ver/ver?id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+		cargarURLParametro("actividades/ver/ver?" , "id_categoria="+id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
 	} else {
 		var id_calendario = document.getElementById("id_calendario").value;
 		if (document.getElementById("id_modalidad") == null){
 			if (document.getElementById("p") == null){
-				llamadaAsincronica("calendarios/ver/ver_actividades_de_calendario?id_calendario="+id_calendario, "modificar_actividades");
+				cargarURLParametro("calendarios/ver/ver_actividades_de_calendario?" , "id_calendario="+id_calendario, "modificar_actividades");
 			}else {
-				llamadaAsincronica("calendarios/ver/publicar?id_calendario="+id_calendario, "pagina");
+				cargarURLParametro("calendarios/ver/publicar?" , "id_calendario="+id_calendario, "pagina");
 			}
 		} else {
 			if (document.getElementById("p") == null){
 				var id_modalidad = document.getElementById("id_modalidad").value;
 				if (id_modalidad == 'todas'){
-					llamadaAsincronica("calendarios/ver/ver_todas_las_actividades_de_calendario?id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
+					cargarURLParametro("calendarios/ver/ver_todas_las_actividades_de_calendario?", "id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
 				} else {
-					llamadaAsincronica("calendarios/ver/ver_calendario_especifico?id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
+					cargarURLParametro("calendarios/ver/ver_calendario_especifico?" , "id_calendario="+id_calendario+"&id_modalidad="+id_modalidad,'actividades');
 				}
 			} else {
-				llamadaAsincronica("calendarios/ver/publicar?id_calendario="+id_calendario, "pagina");
+				cargarURLParametro("calendarios/ver/publicar?", "id_calendario="+id_calendario, "pagina");
 			}		
 		} 	
 	}
@@ -410,7 +410,7 @@ function cargar_form_insertar_actividad(){
 	id_mod_g = document.getElementById("cmb_modalidades").value;
 	id_cal_g = document.getElementById("cmb_calendarios").value;
 
-	llamadaAsincronica('actividades/insertar/insertar_actividad','pagina');
+	cargarURL('actividades/insertar/insertar_actividad','pagina');
 }
 
 function cargar_actividades () {
@@ -419,15 +419,16 @@ function cargar_actividades () {
 	var id_modalidad = document.getElementById("cmb_modalidades").value;
 	var id_calendario = document.getElementById("cmb_calendarios").value;
 
-	var url = "actividades/ver/resultados?id_categoria="+id_categoria+"&id_modalidad="+ id_modalidad+"&periodo="+id_periodo+"&id_calendario="+id_calendario +"&accion=ver";
+	var url = "actividades/ver/resultados?";
+	var parametros = "id_categoria="+id_categoria+"&id_modalidad="+ id_modalidad+"&periodo="+id_periodo+"&id_calendario="+id_calendario +"&accion=ver";
 	document.getElementById("resultado").innerHTML =  "";
-	llamadaAsincronica(url,'resultados');
+	cargarURLParametro(url, parametros, 'resultados');
 }
 
 function cargar_form_ver_actividad(id_actividad,es_especial)
 {
-	var url = "actividades/ver/ver_actividad_especifica?id_actividad="+id_actividad +"&es_especial="+es_especial;
-
+	var url = "actividades/ver/ver_actividad_especifica?";
+    var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
 	
 
 	if (document.getElementById("id_calendario") == null){
@@ -435,16 +436,16 @@ function cargar_form_ver_actividad(id_actividad,es_especial)
 		id_per_g = document.getElementById("cmb_periodos").value;
 		id_mod_g = document.getElementById("cmb_modalidades").value;
 		id_cal_g = document.getElementById("cmb_calendarios").value;
-		llamadaAsincronica(url,'pagina');
+		cargarURLParametro(url, parametros, 'pagina');
 	} else {
 		if (document.getElementById("p") == null){
-			llamadaAsincronica(url, "modificar_actividades");
+			cargarURLParametro(url, parametros, "modificar_actividades");
 		}else{
 			id_cat_g = document.getElementById("cmb_categorias").value;
 			id_per_g = document.getElementById("cmb_periodos").value;
 			id_mod_g = document.getElementById("cmb_modalidades").value;
 			id_cal_g = document.getElementById("cmb_calendarios").value;
-			llamadaAsincronica(url, "actividades");
+			cargarURLParametro(url, parametros, "actividades");
 		}
 	}
 	document.getElementById("resultado").innerHTML =  "";
@@ -452,8 +453,9 @@ function cargar_form_ver_actividad(id_actividad,es_especial)
 
 function cargar_form_eliminar_actividad(id_actividad,es_especial)
 {
-	var url = "actividades/ver/eliminar_actividad?id_actividad="+id_actividad +"&es_especial="+es_especial;
-
+	var url = "actividades/ver/eliminar_actividad?";
+	var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
+	
 	id_cat_g = document.getElementById("cmb_categorias").value;
 	id_per_g = document.getElementById("cmb_periodos").value;
 	id_mod_g = document.getElementById("cmb_modalidades").value;
@@ -461,10 +463,10 @@ function cargar_form_eliminar_actividad(id_actividad,es_especial)
 
 	if (document.getElementById("id_calendario") == null){
 	
-		llamadaAsincronica(url,'pagina');
+		cargarURLParametro(url, parametros, 'pagina');
 	} else {
 
-		llamadaAsincronica(url, "modificar_actividades");
+		cargarURLParametro(url, parametros,  "modificar_actividades");
 	}
 	document.getElementById("resultado").innerHTML =  "";
 	
@@ -472,19 +474,20 @@ function cargar_form_eliminar_actividad(id_actividad,es_especial)
 
 function cargar_form_publicar_actividad(id_actividad,es_especial)
 {
-	var url = "actividades/ver/publicar_actividad?id_actividad="+id_actividad +"&es_especial="+es_especial;
-
-id_cat_g = document.getElementById("cmb_categorias").value;
+	var url = "actividades/ver/publicar_actividad?";
+    var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
+    
+	id_cat_g = document.getElementById("cmb_categorias").value;
 	id_per_g = document.getElementById("cmb_periodos").value;
 	id_mod_g = document.getElementById("cmb_modalidades").value;
 	id_cal_g = document.getElementById("cmb_calendarios").value;
 
 	if (document.getElementById("id_calendario") == null){
 	
-		llamadaAsincronica(url,'pagina');
+		cargarURLParametro(url, parametros, 'pagina');
 	} else {
 
-		llamadaAsincronica(url, "modificar_actividades");
+		cargarURLParametro(url, parametros, "modificar_actividades");
 	}
 	document.getElementById("resultado").innerHTML =  "";
 	
@@ -493,18 +496,20 @@ id_cat_g = document.getElementById("cmb_categorias").value;
 
 function cargar_form_despublicar_actividad(id_actividad,es_especial)
 {
-	var url = "actividades/ver/despublicar_actividad?id_actividad="+id_actividad +"&es_especial="+es_especial;
-id_cat_g = document.getElementById("cmb_categorias").value;
+	var url = "actividades/ver/despublicar_actividad?";
+	var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
+	
+	id_cat_g = document.getElementById("cmb_categorias").value;
 	id_per_g = document.getElementById("cmb_periodos").value;
 	id_mod_g = document.getElementById("cmb_modalidades").value;
 	id_cal_g = document.getElementById("cmb_calendarios").value;
 
 	if (document.getElementById("id_calendario") == null){
 	
-		llamadaAsincronica(url,'pagina');
+		cargarURLParametro(url, parametros, 'pagina');
 	} else {
 
-		llamadaAsincronica(url, "modificar_actividades");
+		cargarURLParametro(url, parametros, "modificar_actividades");
 	}
 	document.getElementById("resultado").innerHTML =  "";
 	
@@ -514,17 +519,18 @@ id_cat_g = document.getElementById("cmb_categorias").value;
 
 function cargar_form_modificar_actividad(id_actividad,es_especial)
 {
-	var url = "actividades/ver/modificar_actividad?id_actividad="+id_actividad +"&es_especial="+es_especial;
+	var url = "actividades/ver/modificar_actividad?";
+	var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
 
-id_cat_g = document.getElementById("cmb_categorias").value;
+	id_cat_g = document.getElementById("cmb_categorias").value;
 	id_per_g = document.getElementById("cmb_periodos").value;
 	id_mod_g = document.getElementById("cmb_modalidades").value;
 	id_cal_g = document.getElementById("cmb_calendarios").value;
 
 	if (document.getElementById("id_calendario") == null){
-		llamadaAsincronica(url,'pagina');
+		cargarURLParametro(url, parametros, 'pagina');
 	} else {
-		llamadaAsincronica(url, "modificar_actividades");
+		cargarURLParametro(url, parametros, "modificar_actividades");
 	}
 	document.getElementById("resultado").innerHTML =  "";		
 }

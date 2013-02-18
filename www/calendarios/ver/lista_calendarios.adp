@@ -3,7 +3,7 @@
 </div>
 <div class="portlet" id="pag" style="min-height: 400px;">
     <div class="form-button" align = "right">
-	    <a href="javascript:llamadaAsincronica('calendarios/insertar/insertar_calendario','pagina')" title="Agregar" class="button">Agregar Calendario</a>
+	    <a onclick="cargarURL('calendarios/insertar/insertar_calendario','pagina')" title="Agregar" class="button">Agregar Calendario</a>
     </div>
     <br>
     <center>
@@ -11,6 +11,6 @@
     </center>
     <br>
     <div class="form-button" align = "right">
-	    <a href="javascript:llamadaAsincronica('calendarios/insertar/insertar_calendario','pagina')" title="Agregar" class="button">Agregar Calendario</a>
+	    <a onclick="cargarURL('calendarios/insertar/insertar_calendario','pagina')" title="Agregar" class="button">Agregar Calendario</a>
     </div>
 </div>

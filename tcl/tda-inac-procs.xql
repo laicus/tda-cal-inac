@@ -477,4 +477,10 @@
         order by td_cal_inac_categorias.nom_categoria asc, fecha_inicio asc
     </querytext> 
   </fullquery>
+  <fullquery name="td_inac_procs::seleccionar_modalidades.seleccionar_modalidades"> 	
+	<querytext>
+		SELECT nom_modalidad, id_modalidad
+		FROM td_sch_cal_inac.modalidad;
+	</querytext>  
+   </fullquery>
 </queryset>

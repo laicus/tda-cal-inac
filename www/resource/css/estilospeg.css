@@ -1,3 +1,23 @@
+/*-------CSS para index---inicio--------------------------*/
+/*---------------------------------
+	HTML ELEMENTS
+-----------------------------------*/
+
+hr{clear:both;border-bottom:0;border-top:1px dotted #ccc;border-right:0;border-left:0;margin:10px 0;min-height: 0px;height:1px;}
+
+hr.alt1
+{
+	border-style: solid;
+	color:#D7D7D7;
+}
+
+hr.alt2
+{
+	border-style: dashed;
+}
+
+
+
 .tabla
 {
 	background-color: 	#bdbebd;
@@ -255,8 +275,8 @@ opacity: 0.8;
 
 
 .textoIntro{
-margin-left: 50px;
-margin-top: 70px;
-width: 70%;
+margin-left: 10px;
+margin-top: 0px;
+width: 98%;
 margin-bottom: 300px;
 }
