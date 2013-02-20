@@ -38,9 +38,7 @@ function InsertarCategoria() {
 					  data: { nom_categoria: nom_categoria, dsc_categoria: dsc_categoria, lst_modalidades: seleccionados }		  
 					}).done(function( msg ) {
 						$("#resultado").empty();
-						//$("#resultado").append("<h2 style='color:#000066'>Inserción exitosa.</h2>");
-						
-						
+						//$("#resultado").append("<h2 style='color:#000066'>Inserción exitosa.</h2>");					
 															  
 					});
 					
