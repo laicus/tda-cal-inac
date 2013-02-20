@@ -16,7 +16,7 @@ set lista_modalidades [td_inac_procs::seleccionar_modalidades]
 ad_form -name formulario -mode edit -has_submit 1 -form {
     {txt_nombre_categoria:text(text)
     	{label "Nombre categoría:"}
-    	{html {rows 1 cols 50}}
+    	{html {rows 1 cols 500}}
     }
     {txt_descripcion_categoria:text(textarea)
     	{label "Descripción:"}

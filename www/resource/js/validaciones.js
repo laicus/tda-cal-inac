@@ -188,18 +188,19 @@ function validar_info_periodo(fecha_inicio,fecha_final,anio,id_modalidad){
 	return true;
 }
 
+// INNECESARIO - BORRAR cambiar por validaciones de Jquery
 //validaciones de categorias
 
 function validar_info_categoria (nom_categoria, dsc_categoria){
 	if(nom_categoria.length == 0){
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Nombre de categoria inválido.</h2>";
 		return "-1"
-	} else if ( nom_categoria.length > 200) {
+	/*} else if ( nom_categoria.length > 200) {
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Nombre de categoria inválido, no puede tener más de 200 caracteres.</h2>";
 		return "-2"
 	} else if (dsc_categoria.length > 200){
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Descripción inválida, no puede tener más de 200 caracteres.</h2>";
-		return "-3"
+		return "-3"*/
 	}else{
 		return "1"
 	}

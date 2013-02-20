@@ -5,33 +5,48 @@ var gConexionCategorias;
 // Crea una nueva categoria
 function InsertarCategoria() {
     //Crea la conexión    
-	gConexionCategorias = CrearXmlHttp();
+	//gConexionCategorias = CrearXmlHttp();
     //Si la conexión no es nula
-	if (gConexionCategorias != null)
-	{
+	//if (gConexionCategorias != null)
+	//{
 	    //Carga el nombre de la categoria
 	    var nom_categoria = document.getElementById("txt_nombre_categoria").value;
 	    //Carga la descripción de la categoria
 	    var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
 	    //Carga la lista de elementos en los cuales aplica
 	    var lista = document.getElementsByName("lst_modalidades");
-	    //Valida la información de la categoría
-	    var er = validar_info_categoria (nom_categoria, dsc_categoria)
+	    //Valida la información de la categoría -> cambiar por validacion de jquery
+	    //var er = validar_info_categoria (nom_categoria, dsc_categoria)
 	    //Si el valor es 1
-	    if(er == "1"){
-	        // Valida la lista de modalidades
+	    //if(er == "1"){
+	        // Valida la lista de modalidades -> validar con jquery
 		    var seleccionados = validar_lista_modalidades(lista);
 		    // Si el valor es -1
 		    if(seleccionados!="-1"){
 		        // Carga la función de respuesta
-			    gConexionCategorias.onreadystatechange = RespuestaInsertarCategoria;
+			    //gConexionCategorias.onreadystatechange = RespuestaInsertarCategoria;
 			    // Abre la conexión con la página de ingresar
-			    gConexionCategorias.open("GET", "categorias/insertar/insertar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&lst_modalidades="+seleccionados, true);
+			    //gConexionCategorias.open("GET", "categorias/insertar/insertar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&lst_modalidades="+seleccionados, true);
 			    //Termina la conexión
-			    gConexionCategorias.send(null);	
+			    //gConexionCategorias.send(null);	
+				
+				//AJAX/Jquery
+				var res ;
+				var xhr = $.ajax({
+					type: "POST",
+					  url: "categorias/insertar/insertar_categoria-2",
+					  data: { nom_categoria: nom_categoria, dsc_categoria: dsc_categoria, lst_modalidades: seleccionados }		  
+					}).done(function( msg ) {
+						$("#resultado").empty();
+						//$("#resultado").append("<h2 style='color:#000066'>Inserción exitosa.</h2>");
+						
+						
+															  
+					});
+					
 		    }
-	    }
-    }
+		//}
+    //}
 }
 
 // Respuesta de la conexión

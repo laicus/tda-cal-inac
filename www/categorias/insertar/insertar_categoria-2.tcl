@@ -14,4 +14,4 @@ ad_page_contract {
 }
 
 set res [td_categorias::insertar_categoria -nom_categoria $nom_categoria -dsc_categoria $dsc_categoria -lst_modalidades $lst_modalidades]
-ns_write $res
+##ns_write $res
