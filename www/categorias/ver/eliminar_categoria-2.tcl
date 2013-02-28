@@ -13,9 +13,5 @@ ad_page_contract {
 # Llama a la funcion de borrado de la categoria
 set res [td_categorias::eliminar_categoria -id_categoria $id_categoria]
 # Escribe la respuesta en consola
-ns_write $res
-
-
-
-
+##ns_write $res
 

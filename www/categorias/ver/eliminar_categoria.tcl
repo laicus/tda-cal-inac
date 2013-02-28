@@ -2,6 +2,7 @@
 ad_page_contract {
     @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
     @author Mauricio Ramírez
+    @author Ederick Navas
     @creation-date 2013-02-06
     @cvs-id $Id$
 

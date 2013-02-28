@@ -4,71 +4,48 @@ var gConexionCategorias;
 
 // Crea una nueva categoria
 function InsertarCategoria() {
-    //Crea la conexión    
-	//gConexionCategorias = CrearXmlHttp();
-    //Si la conexión no es nula
-	//if (gConexionCategorias != null)
-	//{
+   
 	    //Carga el nombre de la categoria
 	    var nom_categoria = document.getElementById("txt_nombre_categoria").value;
 	    //Carga la descripción de la categoria
 	    var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
 	    //Carga la lista de elementos en los cuales aplica
 	    var lista = document.getElementsByName("lst_modalidades");
-	    //Valida la información de la categoría -> cambiar por validacion de jquery
-	    //var er = validar_info_categoria (nom_categoria, dsc_categoria)
-	    //Si el valor es 1
-	    //if(er == "1"){
+	   
 	        // Valida la lista de modalidades -> validar con jquery
 		    var seleccionados = validar_lista_modalidades(lista);
 		    // Si el valor es -1
 		    if(seleccionados!="-1"){
-		        // Carga la función de respuesta
-			    //gConexionCategorias.onreadystatechange = RespuestaInsertarCategoria;
-			    // Abre la conexión con la página de ingresar
-			    //gConexionCategorias.open("GET", "categorias/insertar/insertar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&lst_modalidades="+seleccionados, true);
-			    //Termina la conexión
-			    //gConexionCategorias.send(null);	
+		       
 				
 				//AJAX/Jquery
-				var res ;
+				//enviar datos para insertar la categoria
 				var xhr = $.ajax({
 					type: "POST",
 					  url: "categorias/insertar/insertar_categoria-2",
-					  data: { nom_categoria: nom_categoria, dsc_categoria: dsc_categoria, lst_modalidades: seleccionados }		  
-					}).done(function( msg ) {
-						$("#resultado").empty();
-						//$("#resultado").append("<h2 style='color:#000066'>Inserción exitosa.</h2>");					
-															  
-					});
+					  data: { nom_categoria: nom_categoria, dsc_categoria: dsc_categoria, lst_modalidades: seleccionados }
 					
+					})
+					.done(function( respuesta ) { 
+						$("#resultado").empty();
+						//var res = respuesta.val();
+						//alert(respuesta);
+						 if (respuesta == 1) {
+								//Carga la pagina de categorias
+								cargarURL('categorias/ver/ver','pagina');
+								$("#resultado").append("<h2 style='color:#000066'>Inserción exitosa.</h2>");	
+							} else if ( respuesta == -1 ) {
+								//Si la categoria ya existe. Despliega un mensaje de error
+								$("#resultado").append("<h2 style='color:#990000'>Inserción fallida: Nombre inválido, el nombre de la categoría ya existe.</h2>");
+							} else if ( respuesta == -2 ) {
+								//Si la categoria exite otro problema. Manda un mensaje de error.
+								$("#resultado").append("<h2 style='color:#990000'>Inserción fallida: Error de conexión con la base de datos.</h2>");
+							}													  
+					})
+					.fail(function() { alert("error"); });				
+				
 		    }
-		//}
-    //}
-}
-
-// Respuesta de la conexión
-function RespuestaInsertarCategoria()
-{
-    //Si la conexion esta lista
-    if ((gConexionCategorias.readyState == 4) && (gConexionCategorias.status == 200))
-    {
-        // Guarda la respuesta de la conexion
-	    var respuesta = gConexionCategorias.responseText;
-	    // Si la respuesta es exitosa
-	    if (respuesta == "1") {
-	        //Carga la pagina de categorias
-		    cargarURL('categorias/ver/ver','pagina');
-		    document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Inserción exitosa.</h2>";
-	    } else if ( respuesta == "-1" ) {
-	        //Si la categoria ya existe. Despliega un mensaje de error
-		    document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Inserción fallida: Nombre inválido, el nombre de la categoría ya existe.</h2>"
-	    } else if ( respuesta == "-2" ) {
-	        //Si la categoria exite otro problema. Manda un mensaje de error.
-		    document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Inserción fallida: Error de conexión con la base de datos.</h2>"
-	    }
-
-    }
+	
 }
 
 //Funcion para modificar categorias
@@ -167,46 +144,34 @@ function cargar_form_eliminar_categoria(id_categoria){
     Funcion para eliminar una categoria
 */
 function EliminarCategoria() {
-    //Crea la conexion a la pagina
-	gConexionCategorias = CrearXmlHttp();
-	// Si la conexion no es nula
-	if (gConexionCategorias != null)
-	{
-	    // Crea una variable para el identificador de la categoria
-	    var id = document.getElementById("id_categoria").value;
-	    // Carga la funcion para cuando se encuentre lista la conexion
-	    gConexionCategorias.onreadystatechange = RespuestaEliminarCategoria;
-	    // Abre la pagina de eliminar las categorias
-	    gConexionCategorias.open("GET", "categorias/ver/eliminar_categoria-2?id_categoria="+id, true);
-	    // Termina la conexion
-	    gConexionCategorias.send(null);
-    }
+    
+	// Crea una variable para el identificador de la categoria
+	var id = document.getElementById("id_categoria").value;
+     	
+	var xhr = $.ajax({
+		type: "POST",
+		  url: "categorias/ver/eliminar_categoria-2",
+		  data: { id_categoria: id }
+	 
+		})
+		.done(function( respuesta ) { 
+			$("#resultado").empty();
+			//var res = respuesta.val();
+			//alert(respuesta);
+			 if (respuesta == 1) {
+					//Carga la pagina de categorias
+					cargarURL("categorias/ver/ver", "pagina");
+					$("#resultado").append("<h2 style='color:#000066'>Eliminación exitosa.</h2>");	
+				} else if ( respuesta == -1 ) {
+					//Si la categoria ya existe. Despliega un mensaje de error
+					$("#resultado").append("<h2 style='color:#990000'>Eliminación fallida: Esta categoría está asociada a una o más actividades, por lo cual no se puede eliminar.</h2>");
+				} else if ( respuesta == -2 ) {
+					//Si la categoria exite otro problema. Manda un mensaje de error.
+					$("#resultado").append("<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>");
+				}													  
+		})
+		.fail(function() { alert("error"); });				
+			
+		
 }
 
-/**
-    Funcion de repuesta de para el borrado de eliminar categoria
-*/
-function RespuestaEliminarCategoria()
-{
-    // Si la conexion se encuentra lista
-    if ((gConexionCategorias.readyState == 4) && (gConexionCategorias.status == 200))
-	{
-	    //Verifica la respuesta del borrado
-		var respuesta = gConexionCategorias.responseText;
-		//Si la respuesta es correcta
-		if (respuesta == "1") {
-		    //Carga la lista
-			 cargarURL("categorias/ver/ver", "pagina");
-			//Carga un mensaje
-			document.getElementById("resultado").innerHTML =  "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
-		// Si la respuesta no es correcta
-		} else if ( respuesta == "-1" ) {
-		    // Manda un mensaje de error
-			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Esta categoría está asociada a una o más actividades, por lo cual no se puede eliminar.</h2>"
-        // Si la respuesta no es correcta
-		} else if ( respuesta == "-2" ) {
-		    //Manda un mensaje de error
-			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>"
-		}
-   }
-}

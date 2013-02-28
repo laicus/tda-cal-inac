@@ -38,10 +38,11 @@ ad_proc -public td_categorias::eliminar_categoria {
     Realiza el borrado de una categoria
     @param id_categoria Identificador de la categoria
 } {
+	set retorno ""
     # Abre el bloque de transacciones de base de datos
 	db_transaction {
 	    # Verifica que exista la categoria
-		if {[db_0or1row existe_actividad_con_categoria {}] } {
+		if {[db_0or1row existe_actividad_con_categoria {}] != 1 }  {
 		    # Borra las modalidades asociadas a la categoria
 			db_dml eliminar_categoria_modalidad {}
 			# Borra la categoria
@@ -116,6 +117,7 @@ ad_proc -public td_categorias::insertar_categoria {
     @return Devuelve 1 en caso exitos, -1 y -2 en caso de error
 } {
     # Bloque de transaccion de base de datos
+    set salida ""
 	db_transaction {
 	    # Verifica si existe la categoria en la base de datos
 		set id_categoria [db_string seleccionar_categoria_por_nombre {} -default ""]
@@ -131,15 +133,16 @@ ad_proc -public td_categorias::insertar_categoria {
 				db_dml insertar_categoria_modalidad {}
 			}
 			# Termina con exito
-			return 1;
+			set salida 1;
 		} else {
 		    # Error la categoria ya existe
-			return -1
+			set salida -1;
 		}
 	} on_error {
 	    # Error de base de datos
-	    return -2;
+	    set salida -2;
 	}
+	return $salida;
 }
 
 ad_proc -public td_categorias::modificar_categoria {

@@ -6,8 +6,8 @@
 		<div class="form-item-wrapper">
 			<formtemplate id = "formulario"></formtemplate>
 			<div class="form-button">
-				<a href="javascript:volver_ver_categorias();" title="Volver" class="button">Volver</a>
-				<a href="javascript:ModificarCategoria();" title="Modificar" class="button">Modificar</a>
+				<a onclick="javascript:volver_ver_categorias();" title="Volver" class="button">Volver</a>
+				<a onclick="javascript:ModificarCategoria();" title="Modificar" class="button">Modificar</a>
 			</div>
 		</div>
 	</div>

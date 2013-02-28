@@ -18,11 +18,11 @@ set columnas {
 	}
 	accion_modificar { 
 		label "Modificar" 
-		display_template { <center> <nobr> <a href=\"javascript:cargar_form_modificar_categoria('@categorias.id_categoria@')"\>Modificar</a> </nobr> </center> }
+		display_template { <center> <nobr> <a onclick=\"javascript:cargar_form_modificar_categoria('@categorias.id_categoria@')"\>Modificar</a> </nobr> </center> }
 	}
 	accion_eliminar { 
 		label "Eliminar" 
-		display_template { <center> <nobr> <a href=\"javascript:cargar_form_eliminar_categoria('@categorias.id_categoria@')"\>Eliminar</a> </nobr> </center> }
+		display_template { <center> <nobr> <a onclick=\"javascript:cargar_form_eliminar_categoria('@categorias.id_categoria@')"\>Eliminar</a> </nobr> </center> }
 	}
 }
 
