@@ -44,7 +44,7 @@ ad_proc -public td_categorias::eliminar_categoria {
 	    # Verifica que exista la categoria
 		if {[db_0or1row existe_actividad_con_categoria {}] != 1 }  {
 		    # Borra las modalidades asociadas a la categoria
-			db_dml eliminar_categoria_modalidad {}
+			#db_dml eliminar_categoria_modalidad {}
 			# Borra la categoria
 			db_dml eliminar_categoria {}
 			# Guarda el valor de 1
@@ -107,7 +107,7 @@ ad_proc -public td_categorias::seleccionar_categorias_por_modalidad {
 ad_proc -public td_categorias::insertar_categoria {
     {-nom_categoria:required}
     {-dsc_categoria:required}
-    {-lst_modalidades:required}
+    
 } {
     Función encargada de agregar de insertar las categorias
     
@@ -126,12 +126,12 @@ ad_proc -public td_categorias::insertar_categoria {
 		    # Guarda la categoria y almacena el identificador
 			set id_categoria [db_string insertar_categoria {}]
 			# REVISAR, PROBLEMA DE LISTA DENTRO DE LISTA
-			set lst_modalidades [lindex $lst_modalidades 0]
+			#set lst_modalidades [lindex $lst_modalidades 0]
 			# Por cada modalidad
-			foreach id_modalidad $lst_modalidades {
+			#foreach id_modalidad $lst_modalidades {
 			    # Guarde la categoria y la modalidad
-				db_dml insertar_categoria_modalidad {}
-			}
+				#db_dml insertar_categoria_modalidad {}
+			#}
 			# Termina con exito
 			set salida 1;
 		} else {
@@ -147,8 +147,7 @@ ad_proc -public td_categorias::insertar_categoria {
 
 ad_proc -public td_categorias::modificar_categoria {
     {-nom_categoria:required}
-    {-dsc_categoria:required}
-    {-lst_modalidades:required}
+    {-dsc_categoria:required}    
     {-id_categoria:required}
 } {
     Función encargada de realizar la actualización de la categoria
@@ -162,17 +161,7 @@ ad_proc -public td_categorias::modificar_categoria {
 	db_transaction {
 	    #Realiza la actualizacion
 		db_dml modificar_categoria {}
-		#Borra las categorias
-		db_dml borrar_modalidades {}
-		#Inserta las categorias
-		# REVISAR, PROBLEMA DE LISTA DENTRO DE LISTA
-		set lst_modalidades [lindex $lst_modalidades 0]
-		puts $lst_modalidades
-		# Por cada modalidad
-		foreach id_modalidad $lst_modalidades {
-		    # Guarde la categoria y la modalidad
-			db_dml insertar_categoria_modalidad { }
-        }
+		
 		#Almacena el valor de salida
 		set salida 1;
 	} on_error {

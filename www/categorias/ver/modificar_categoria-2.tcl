@@ -6,13 +6,12 @@ ad_page_contract {
     @cvs-id $Id$
 } {
 	nom_categoria:notnull
-	dsc_categoria:notnull
-	lst_modalidades:notnull
+	dsc_categoria:notnull	
 	id_categoria:notnull
 }
 
-puts "Lista de modalidades $lst_modalidades"
+
 
 #Realiza la carga de la categoria modificada en la base de datos
-set res [td_categorias::modificar_categoria -nom_categoria $nom_categoria -dsc_categoria $dsc_categoria -lst_modalidades $lst_modalidades -id_categoria $id_categoria]
+set res [td_categorias::modificar_categoria -nom_categoria $nom_categoria -dsc_categoria $dsc_categoria -id_categoria $id_categoria]
 ns_write $res

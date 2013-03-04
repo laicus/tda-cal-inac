@@ -10,12 +10,12 @@ function InsertarCategoria() {
 	    //Carga la descripción de la categoria
 	    var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
 	    //Carga la lista de elementos en los cuales aplica
-	    var lista = document.getElementsByName("lst_modalidades");
+	    //var lista = document.getElementsByName("lst_modalidades");
 	   
 	        // Valida la lista de modalidades -> validar con jquery
-		    var seleccionados = validar_lista_modalidades(lista);
+		    //var seleccionados = validar_lista_modalidades(lista);
 		    // Si el valor es -1
-		    if(seleccionados!="-1"){
+		    //if(seleccionados!="-1"){
 		       
 				
 				//AJAX/Jquery
@@ -23,7 +23,7 @@ function InsertarCategoria() {
 				var xhr = $.ajax({
 					type: "POST",
 					  url: "categorias/insertar/insertar_categoria-2",
-					  data: { nom_categoria: nom_categoria, dsc_categoria: dsc_categoria, lst_modalidades: seleccionados }
+					  data: { nom_categoria: nom_categoria, dsc_categoria: dsc_categoria }
 					
 					})
 					.done(function( respuesta ) { 
@@ -44,7 +44,7 @@ function InsertarCategoria() {
 					})
 					.fail(function() { alert("error"); });				
 				
-		    }
+		    //}
 	
 }
 
@@ -70,13 +70,13 @@ function ModificarCategoria() {
 	    //Carga la descripcion de la categoria
 	    var dsc_categoria = document.getElementById("txt_descripcion_categoria").value;
 	    //Carga la lista de elementos en los cuales aplica
-	    var lista = document.getElementsByName("lst_modalidades");
+	    //var lista = document.getElementsByName("lst_modalidades");
 	    // Saca los elementos de la lista
-	    var seleccionados = elementos_lista(lista);
+	    //var seleccionados = elementos_lista(lista);
         //Carga la lista funcion de respuesta para carga de categoria
 	    gConexionCategorias.onreadystatechange = RespuestaModificarCategoria;
 	    //Carga la pagina de modificar categoria
-	    gConexionCategorias.open("GET", "categorias/ver/modificar_categoria-2?nom_categoria="+nom_categoria+"&lst_modalidades="+seleccionados+"&dsc_categoria="+dsc_categoria+"&id_categoria="+id_categoria, true);
+	    gConexionCategorias.open("GET", "categorias/ver/modificar_categoria-2?nom_categoria="+nom_categoria+"&dsc_categoria="+dsc_categoria+"&id_categoria="+id_categoria, true);
 	    //Termina la conexion
 	    gConexionCategorias.send();
 	}
