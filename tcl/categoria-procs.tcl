@@ -205,6 +205,32 @@ ad_proc -public td_categorias::seleccionar_actividades_temporales  {
 	}
 }
 
+ad_proc -public td_categorias::seleccionar_actividades  {
+	-multirow
+} {
+	@multirow estructura donde almacena las actividades
+} {
+	db_transaction {	
+		return [db_multirow $multirow seleccionar_actividades {}]
+	} on_error {
+		return -1
+	}
+}
+
+
+
+ad_proc -public td_categorias::seleccionar_actividades  {
+	-multirow
+} {
+} {
+	db_transaction {	
+		return [db_multirow $multirow seleccionar_actividades_temporales {}]
+	} on_error {
+		return -1
+	}
+}
+
+
 ad_proc -public td_categorias::insertar_actividades_temporales  {
 	-nom_actividad
 	-dsc_actividad
@@ -222,21 +248,20 @@ ad_proc -public td_categorias::insertar_actividades_temporales  {
 } {
 	db_transaction {
 		set repetidas [db_list_of_lists validar_actividad_con_no_temporales {}]
+		
 		if {[llength $repetidas] != 0 } {
+		
 			set retorno -2
-		} else { 
-			set repetidas [db_list_of_lists validar_actividad_con_no_temporales_especial {}]
-			if {[llength $repetidas] != 0 } {
-				set retorno -3
-			} else {	
-				set id_actividad [td_categorias::insertar_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -estado_publicacion 0]
-				if { $id_actividad > 0 } {				
-					db_dml insertar_actividades_temporales {}
-					set retorno 1
-				} else {
-					set retorno -5				
-				}
-			}
+		
+		} else {
+			
+			set id_actividad [td_categorias::insertar_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -estado_publicacion 0]
+			if { $id_actividad > 0 } {				
+				#db_dml insertar_actividades_temporales {}
+				set retorno 1
+			} else {
+				set retorno -5				
+			}			
 		}	
 	} on_error {
 		set retorno -4
@@ -246,7 +271,7 @@ ad_proc -public td_categorias::insertar_actividades_temporales  {
 
 ad_proc -public td_categorias::seleccionar_periodos_por_modalidad {
 	{-id_modalidad}
-	{-id_calendario}
+	{-term_year}
 } {
 } {
 	db_transaction {
@@ -419,13 +444,13 @@ ad_proc -public td_categorias::insertar_actividad {
 } {
 } {
 	db_transaction {
-puts "===================............. INICIO PROCESO DE INSERCION...."	
+		puts "===================............. INICIO PROCESO DE INSERCION...."	
 		if { $estado_publicacion } {
-		#===== Se descomentan las siguientes 2 líneas --- fcontreras 09.12.2012 2pm ======
-			db_1row profesores { select calendar_id as profesores from calendars where calendar_name = 'Profesores ITCR' }
-			db_1row estudiantes { select calendar_id as estudiantes from calendars where calendar_name = 'Estudiantes ITCR' }
-		#===== FIN DE MODIFICACION =====
-			db_1row funcionarios { select calendar_id as funcionarios from calendars where calendar_name = 'Funcionarios ITCR' }
+		#===== Se seleccionan las dos comunicades comunidades donde se puede publicar
+			#db_1row profesores { select calendar_id as profesores from calendars where calendar_name = 'Profesores ITCR' }
+			#db_1row estudiantes { select calendar_id as estudiantes from calendars where calendar_name = 'Estudiantes ITCR' }
+		#=====================================
+			#db_1row funcionarios { select calendar_id as funcionarios from calendars where calendar_name = 'Funcionarios ITCR' }
 			set s $nom_actividad
 			set date $fecha_inicio
 			set ansi_date $date
@@ -446,7 +471,7 @@ puts "===================............. INICIO PROCESO DE INSERCION...."
 			} else {
 				set repeat_p 1
 			}
-
+			# Fecha inicio < que ficha final
 			if { $repeat_p == 1 } {
 				set recur_until $fecha_final
 				set recur_until [calendar::from_sql_datetime -sql_date $recur_until  -format "YYY-MM-DD"]
@@ -459,7 +484,7 @@ puts "===================............. INICIO PROCESO DE INSERCION...."
 					-recur_until [calendar::to_sql_datetime -date $recur_until -time "" -time_p 0]
 			}
 			set id_actividad [ db_string insertar_actividad_publicada {} ]
-			db_dml insertar_modalidadxactividad {}
+			db_dml insertar_actividad_term {}
 			db_dml insertar_termsxactividad {}
 
 			if {$id_modalidad != "O"} {
@@ -468,15 +493,14 @@ puts "===================............. INICIO PROCESO DE INSERCION...."
 
 		} else { 
 			# ===== AUN NO SE VA A PUBLICAR ========
+			# Insertar actividad
             puts "===========........ Se va a insertar la actividad..."
 			set id_actividad [ db_string insertar_actividad {} ]
             puts "===========........ Se inserto la actividad... RESULTADO $id_actividad"
-            puts "===========........ Se va a insertar la modalidad x actividad... con id_actividad = $id_actividad y id_modalidad = $id_modalidad"
-			db_dml insertar_modalidadxactividad {}
-            puts "===========........ Se inserto la modalidad x actividad...  MODALIDAD ES $id_modalidad"
-			if {$id_modalidad != "O"} {
-				db_dml insertar_periodoxactividad {}
-			}
+            # Insertar fechas y periodo de actividad
+			db_dml insertar_actividad_term {}
+            
+			
 		}
 		set retorno $id_actividad
 	} on_error { 

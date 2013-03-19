@@ -428,7 +428,7 @@ function cargar_actividades () {
 function cargar_form_ver_actividad(id_actividad,es_especial)
 {
 	var url = "actividades/ver/ver_actividad_especifica?";
-    var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
+    var parametros = "id_actividad="+id_actividad;
 	
 
 	if (document.getElementById("id_calendario") == null){

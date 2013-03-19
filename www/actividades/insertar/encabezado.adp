@@ -12,6 +12,13 @@
 		<div id="contenedor_formularioEncabezado">
 			<formtemplate id = "formularioEncabezado"></formtemplate>
 	    </div>
+	    <div id="contenedor_frm_seccion_comunidades">
+			<formtemplate id = "frm_seccion_comunidades"></formtemplate>
+	    </div>
+	    <div id="contenedor_frm_seccion_publicacion">
+			<formtemplate id = "frm_seccion_publicacion"></formtemplate>
+	    </div>
+	    
         <div class="form-button">
 	        <a href="javascript:volver_ver_actividades();" title="Volver" class="button">Volver</a>
 	        <a href="javascript:InsertarActividad();" title="Insertar" class="button">Agregar</a>

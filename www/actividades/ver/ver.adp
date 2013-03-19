@@ -10,9 +10,9 @@
 	    <div id="contenedor_frm_seccion_modalidades">
 		    <formtemplate id = "frm_seccion_modalidades"></formtemplate>
 	    </div>
-	    <!--<div id="contenedor_frm_seccion_periodos">
+	    <div id="contenedor_frm_seccion_periodos">
 		    <formtemplate id = "frm_seccion_periodos"></formtemplate>
-	    </div>-->
+	    </div>
 	    <div id="contenedor_frm_seccion_categorias">
 		    <formtemplate id = "frm_seccion_categorias"></formtemplate>
 	    </div>

@@ -5,4 +5,4 @@ ad_page_contract {
     @cvs-id $Id$
 } { }
 
-td_categorias::eliminar_actividades_temporales
+#td_categorias::eliminar_actividades_temporales

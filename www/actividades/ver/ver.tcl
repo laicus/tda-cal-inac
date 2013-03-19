@@ -16,15 +16,15 @@ ad_form -name accion -has_submit 1 -form {
     {hiden_accion:integer(hidden) {value $accion} {html {id "hiden_accion"} } }
 }
 
-set especial 1
+#set especial 1
 set lista_calendarios [concat { {"TODOS" "0"} } [td_calendarios::seleccionar_calendarios] ]
-set list_modalidades [concat { {"TODOS" "%"} } [td_inac_procs::seleccionar_modalidades_por_calendario -id_calendario $id_calendario] ]
+set list_modalidades [concat { {"TODOS" "%"} } [td_inac_procs::seleccionar_modalidades] ]
 
 if { $especial == 0 } {
 
 } else {
-	set list_categorias [concat { {"TODOS" "%"} } [td_categorias::seleccionar_categorias_por_modalidad -id_modalidad $id_modalidad ]]
-	set list_periodos [concat { {"TODOS" "%"} } [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -id_calendario $id_calendario ]]
+	set list_categorias [concat { {"TODOS" "%"} } [td_categorias::seleccionar_categorias]]
+	set list_periodos [concat { {"TODOS" "%"} } [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -term_year $id_calendario ]]
 }
 
 form create frm_seccion_general -has_submit 1

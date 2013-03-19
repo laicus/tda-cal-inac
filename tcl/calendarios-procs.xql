@@ -2,8 +2,8 @@
 <queryset> 
   <fullquery name="td_calendarios::seleccionar_calendarios.seleccionar_calendarios"> 
     <querytext> 
-	    select num_ano, id_calendario 
-	    from td_sch_cal_inac.calendario;
+		select distinct term_year, term_year as id
+		from public.dotlrn_terms;
     </querytext> 
   </fullquery> 
 

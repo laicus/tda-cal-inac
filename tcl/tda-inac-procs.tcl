@@ -42,7 +42,7 @@ ad_proc -public td_inac_procs::seleccionar_modalidades_para_periodos {
 
 
 ad_proc -public td_inac_procs::seleccionar_modalidades_por_calendario {
-	-id_calendario
+	-term_year
 } {
 } {
     return [db_list_of_lists seleccionar_modalidades_por_calendario {}]
@@ -357,3 +357,11 @@ ad_proc -public td_inac_procs::seleccionar_actividades_por_calendario {
 } {
 	return [db_multirow $multirow seleccionar_actividades_por_calendario {}]
 }
+
+ad_proc -public td_inac_procs::seleccionar_comunidades {	
+} {
+	returna la lista de las comunidades	
+} {
+	return [db_list_of_lists seleccionar_comunidades {}]
+}
+

@@ -22,14 +22,14 @@ if { $es_modificar == 0 } {
 		    -widget select \
 		    -html { style "width:150px" onChange "document.frm_seccion_categorias.cmb_categorias.disabled = false; javascript:cargarCategorias(0,1); " } \
 		    -optional \
-		    -options [concat { {"TODOS" "%"} } [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -id_calendario $id_calendario]]
+		    -options [concat { {"TODOS" "%"} } [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -term_year $id_calendario]]
 	} else {
 		element create frm_seccion_periodos cmb_periodos \
 		    -label "Período:" \
 		    -datatype text \
 		    -widget select \
 		    -html { style "width:150px" } \
-        	-options [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -id_calendario $id_calendario]
+        	-options [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -term_year $id_calendario]
 	}
 } else {
 	element create frm_seccion_periodos cmb_periodos \
@@ -37,5 +37,5 @@ if { $es_modificar == 0 } {
         -datatype text \
         -widget select \
         -html { style "width:150px" } \
-        -options [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -id_calendario $id_calendario]
+        -options [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -term_year $id_calendario]
 }

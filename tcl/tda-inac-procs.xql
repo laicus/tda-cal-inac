@@ -10,11 +10,8 @@
 
   <fullquery name="td_inac_procs::seleccionar_modalidades_por_calendario.seleccionar_modalidades_por_calendario">
     <querytext>
-        SELECT distinct (td_cal_inac_modalidades.nom_modalidad), td_cal_inac_modalidades.id_modalidad, td_admision_periodo.id_calendario  
-		FROM td_cal_inac_modalidades
-    		INNER JOIN td_admision_periodo
-    		ON td_cal_inac_modalidades.id_modalidad = td_admision_periodo.cod_modalidad
-		WHERE  td_cal_inac_modalidades.es_especial = '0' and id_calendario = :id_calendario
+        SELECT id_modalidad, nom_modalidad 
+		FROM td_sch_cal_inac.modalidad
     </querytext>
   </fullquery>
 
@@ -154,17 +151,28 @@
 
  <fullquery name="td_inac_procs::obtener_todas_las_actividades.obtener_todas_las_actividades"> 
     <querytext> 
-        select  td_cal_inac_actividades.id_actividad, td_cal_inac_modalidades.es_especial, nom_actividad,dsc_actividad,
-        fecha_inicio, fecha_final, 
-            case estado_publicacion when 't' then 'Publicada' else 'No Publicada' end as estado_publicacion 
-        from td_cal_inac_actividades 
-	        inner join td_cal_inac_modalidadesxactividad
-	        on td_cal_inac_actividades.id_actividad = td_cal_inac_modalidadesxactividad.id_actividad
-	            inner join td_cal_inac_modalidades 
-	            on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad
-	                inner join td_cal_inac_categorias
-	                on td_cal_inac_actividades.id_categoria = td_cal_inac_categorias.id_categoria 
-        order by fecha_inicio desc
+       SELECT 
+		  actividad.id_actividad,
+		  actividad.nom_actividad, 
+		  actividad_term.fecha_inicio, 
+		  actividad_term.fecha_fin, 
+		  (dotlrn_terms.term_name || ', ' || dotlrn_terms.term_year) as periodo,
+		  categoria.nom_categoria,
+		  case cal_actividad.estado_publicacion
+		  when 't' then 'Publicada' else 'No publicada' end as estado_publicacion
+		FROM 
+		  td_sch_cal_inac.actividad, 
+		  td_sch_cal_inac.actividad_term, 
+		  td_sch_cal_inac.cal_actividad, 
+		  public.dotlrn_terms, 
+		  td_sch_cal_inac.categoria
+		WHERE 
+		  actividad.id_categoria = categoria.id_categoria AND
+		  actividad_term.id_actividad = actividad.id_actividad AND
+		  actividad_term.term_id = dotlrn_terms.term_id AND
+		  cal_actividad.id_term_actividad = actividad_term.id_term_actividad
+		ORDER BY
+		  actividad_term.fecha_inicio 
     </querytext> 
   </fullquery>
 
@@ -237,24 +245,28 @@
 
  <fullquery name="td_inac_procs::seleccionar_actividad_para_ver.seleccionar_actividad_para_ver"> 
     <querytext> 
-        select td_cal_inac_actividades.id_actividad, nom_actividad, nom_categoria, fecha_inicio, fecha_final, 
-            dsc_actividad, (term_name || ' ' || term_year), nom_modalidad, td_cal_inac_calendarios.num_ano 
-        from td_cal_inac_actividades 
-            inner join td_cal_inac_periodosxactividades
-            on td_cal_inac_periodosxactividades.id_actividad = td_cal_inac_actividades.id_actividad
-                inner join td_admision_periodo 
-                on td_admision_periodo.id_term = td_cal_inac_periodosxactividades.id_periodo
-                    inner join dotlrn_terms on
-                    dotlrn_terms.term_id = td_admision_periodo.id_term
-                        inner join td_cal_inac_modalidadesxactividad
-                        on td_cal_inac_modalidadesxactividad.id_actividad = td_cal_inac_actividades.id_actividad
-                            inner join td_cal_inac_modalidades
-                            on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad
-                                inner join td_cal_inac_categorias
-                                on td_cal_inac_categorias.id_categoria = td_cal_inac_actividades.id_categoria
-                                    inner join td_cal_inac_calendarios 
-                                    on td_cal_inac_actividades.id_calendario = td_cal_inac_calendarios.id_calendario 
-        where td_cal_inac_actividades.id_actividad = :id_actividad
+        SELECT 
+		  actividad.id_actividad,
+		  actividad.nom_actividad,
+		  categoria.nom_categoria, 
+		  actividad_term.fecha_inicio, 
+		  actividad_term.fecha_fin,
+		  actividad.dsc_actividad,
+		  (dotlrn_terms.term_name || ', ' || dotlrn_terms.term_year) as periodo,
+		  split_part(dotlrn_terms.term_name,' ',1) as nom_modalidad,
+		  dotlrn_terms.term_year  
+		FROM 
+		  td_sch_cal_inac.actividad, 
+		  td_sch_cal_inac.actividad_term, 
+		  td_sch_cal_inac.cal_actividad, 
+		  public.dotlrn_terms, 
+		  td_sch_cal_inac.categoria
+		WHERE 
+		  actividad.id_categoria = categoria.id_categoria AND
+		  actividad_term.id_actividad = actividad.id_actividad AND
+		  actividad_term.term_id = dotlrn_terms.term_id AND
+		  cal_actividad.id_term_actividad = actividad_term.id_term_actividad AND
+		  actividad.id_actividad = :id_actividad
     </querytext> 
   </fullquery>
  
@@ -483,4 +495,14 @@
 		FROM td_sch_cal_inac.modalidad;
 	</querytext>  
    </fullquery>
+   <!-- Consultar comunidades-->
+   <fullquery name="td_inac_procs::seleccionar_comunidades.seleccionar_comunidades"> 	
+	<querytext>
+     SELECT calendar_name, calendar_id 
+     FROM calendars 
+	 WHERE calendar_name = 'Profesores ITCR' OR
+		   calendar_name = 'Funcionarios ITCR' OR
+           calendar_name = 'Estudiantes ITCR'
+     </querytext>  
+   </fullquery>      
 </queryset>
