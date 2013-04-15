@@ -17,7 +17,7 @@
 		    <formtemplate id = "frm_seccion_categorias"></formtemplate>
 	    </div>
     </div>
-    <div id = "grid_resultados"></div>
+    
 </div>
 
 <div id = "resultados" class="portlet" style="min-height: 400px;">

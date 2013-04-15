@@ -14,13 +14,14 @@ ad_page_contract {
 form create frm_seccion_periodos -has_submit 1
 
 #--------------------------------------------------------------------------------------------------
+
 if { $es_modificar == 0 } {
 	if {$es_ver == 1} {
 		element create frm_seccion_periodos cmb_periodos \
 		    -label "Períodos:" \
 		    -datatype text \
 		    -widget select \
-		    -html { style "width:150px" onChange "document.frm_seccion_categorias.cmb_categorias.disabled = false; javascript:cargarCategorias(0,1); " } \
+		    -html { style "width:150px" onChange "javascript:cargarCategorias(0,1); javascript:cargar_actividades()" } \
 		    -optional \
 		    -options [concat { {"TODOS" "%"} } [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -term_year $id_calendario]]
 	} else {

@@ -8,10 +8,28 @@ ad_page_contract {
 	id_modalidad:optional
 }
 
-set lista_calendarios [td_calendarios::seleccionar_calendarios]
+#========================================================
+# Listas utilizadas
+#========================================================
 
 
-set list_modalidades [td_inac_procs::seleccionar_modalidades]
+set lista_calendarios [ td_calendarios::seleccionar_calendarios ]
+set list_modalidades [ td_inac_procs::seleccionar_modalidades ]
+set list_comunidades [ td_inac_procs::seleccionar_comunidades ]
+
+#========================================================
+# Cargar Comunidades Institucionales
+#========================================================
+
+set nbr_com1 [lindex $list_comunidades 0 0]
+set val_com1 [lindex $list_comunidades 0 1]
+
+
+set nbr_com2 [lindex $list_comunidades 1 0]
+set val_com2 [lindex $list_comunidades 1 1]
+
+set nbr_com3 [lindex $list_comunidades 2 0]
+set val_com3 [lindex $list_comunidades 2 1]
 
 #========================================================
 #  Creación del formulario
@@ -69,21 +87,36 @@ element create frm_seccion_categorias cmb_categorias \
     -options [td_categorias::seleccionar_categorias]
 
 
-element create frm_seccion_comunidades chk_comunidades \
+element create frm_seccion_comunidades chk_comunidad1 \
 	-label "Comunidades:" \
 	-datatype text \
 	-widget checkbox \
 	-html { style "width:150px" } \
-	-options [td_inac_procs::seleccionar_comunidades]
+	-options [list [list $nbr_com1  $val_com1] ]
 
-element create frm_seccion_publicacion chk_publicacion \
+element create frm_seccion_comunidades chk_comunidad2 \
+	-label "" \
+	-datatype text \
+	-widget checkbox \
+	-optional \
+	-html { style "width:150px" } \
+	-options [list [list $nbr_com2  $val_com2] ]
+
+element create frm_seccion_comunidades chk_comunidad3 \
+	-label "" \
+	-datatype text \
+	-widget checkbox \
+	-optional \
+	-html { style "width:150px" } \
+	-options [list [list $nbr_com3  $val_com3] ]
+
+element create frm_seccion_publicacion rad_publicacion \
 	-label "¿Desea publicar?:" \
 	-datatype text \
 	-widget radio \
 	-html { style "width:150px" } \
 	-options { {No 0} {Si 1}} \
 	-value 0
-
 
 ad_form  -name formularioEncabezado -mode edit -has_submit 1 -form {
 	{fecha_inicio:text(text)
@@ -101,11 +134,7 @@ ad_form  -name formularioEncabezado -mode edit -has_submit 1 -form {
 	}
 }
 
-set var [element get_value frm_seccion_publicacion chk_publicacion]
-
-
-set check [element get_value frm_seccion_comunidades chk_comunidades]
-	
-puts "valor de radio es $var y el check $check"
+#set var [element get_value frm_seccion_publicacion chk_publicacion]
+#set check [element get_value frm_seccion_comunidades chk_comunidades]
 
 

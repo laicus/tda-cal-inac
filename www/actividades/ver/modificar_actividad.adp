@@ -17,6 +17,12 @@
 			<div id="contenedor_formularioEncabezado">
 				<formtemplate id = "formularioEncabezado"></formtemplate>
 			</div>
+			<div id="contenedor_frm_seccion_comunidades">
+			<formtemplate id = "frm_seccion_comunidades"></formtemplate>
+			</div>
+			<div id="contenedor_frm_seccion_publicacion">
+				<formtemplate id = "frm_seccion_publicacion"></formtemplate>
+			</div>
 		</div>
 		<div class="form-item-wrapper">
 			<div class="form-button">

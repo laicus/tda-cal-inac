@@ -117,10 +117,10 @@ function RespuestaCargarPeriodos()
 {
     if (gConexionActualizar.readyState == 4)
     {
-	if (gConexionActualizar.status == 200)
-	{	
-	    document.getElementById("contenedor_frm_seccion_periodos").innerHTML = gConexionActualizar.responseText;
-	}
+		if (gConexionActualizar.status == 200)
+		{	
+			document.getElementById("contenedor_frm_seccion_periodos").innerHTML = gConexionActualizar.responseText;
+		}
     }
 }
 
@@ -133,9 +133,9 @@ function cargarCategorias(es_modificar,es_ver)
 	return;	
     }
     
-    var id_modalidad = document.getElementById("cmb_modalidades").value;
+    var term_id = document.getElementById("cmb_periodos").value;
    gConexionActividades.onreadystatechange = RespuestaCargarCategorias;
-   gConexionActividades.open("GET", "formularios/categorias-lista?id_modalidad=" + id_modalidad + "&es_modificar="+es_modificar+"&es_ver="+es_ver, true);
+   gConexionActividades.open("GET", "formularios/categorias-lista?term_id=" + term_id + "&es_modificar="+es_modificar+"&es_ver="+es_ver, true);
    gConexionActividades.send(null);
 }
  

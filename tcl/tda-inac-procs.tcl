@@ -42,7 +42,7 @@ ad_proc -public td_inac_procs::seleccionar_modalidades_para_periodos {
 
 
 ad_proc -public td_inac_procs::seleccionar_modalidades_por_calendario {
-	-term_year
+	-id_calendario
 } {
 } {
     return [db_list_of_lists seleccionar_modalidades_por_calendario {}]
@@ -147,36 +147,50 @@ ad_proc -public td_inac_procs::obtener_actividades_especiales_para_visualizador 
 
 ad_proc -public td_inac_procs::obtener_todas_las_actividades {
 	-multirow
+	-sql_query
 } {
 } {
 	return [db_multirow $multirow obtener_todas_las_actividades {}]
 }
 
 ad_proc -public td_inac_procs::eliminar_actividad {
-	-id_actividad
-	-estado_publicacion
+	-id_actividad	
 } {
+	Eliminar una actividad especifica incluyendo la publicacion en el calendario
 } {
 	db_transaction {
-		if { $estado_publicacion } {
-			set lista_cal_item_ids [td_inac_procs::obtener_id_cal_item_por_actividad -id_actividad $id_actividad]
-			if { $lista_cal_item_ids != -1 } {
-				foreach cal_item_id $lista_cal_item_ids {	
+		
+		#cargar los cal_item_id de las actividades publicadas	
+		set lista_cal_item_ids [td_inac_procs::obtener_id_cal_item_por_actividad -id_actividad $id_actividad]
+		set largo [llength $lista_cal_item_ids]
+		set id_term_actividad [td_inac_procs::obtener_id_term_actividad_por_actividad -id_actividad $id_actividad]
+		puts "paso1 con largo de $largo"
+		#eliminar de cal_actividad los registros de la actividad id_term_actividad
+		db_dml eliminar_cal_actividad {}
+		puts "paso2"
+		#eliminar las publicaciones de las comunidades
+		if { $lista_cal_item_ids != -1 } {
+			puts "paso3"
+			puts "$lista_cal_item_ids"
+			foreach cal_item_id $lista_cal_item_ids {
+				puts "cal_item_id es $cal_item_id"
+				if { $cal_item_id != "" } {
 					calendar::item::get -cal_item_id $cal_item_id -array cal_item
 					calendar::item::delete -cal_item_id $cal_item_id
 					calendar::item::delete_recurrence -recurrence_id $cal_item(recurrence_id)
 				}
-				db_dml eliminar_actividad {}
-				set retorno 1
-			} else {
-				set retorno -1			
-			}		
-		} else {
-            puts "........============ Entro acá pq el estado es $estado_publicacion y la actividad es $id_actividad va a eliminar... "
-			db_dml eliminar_actividad {}
-            puts "--------------------- elimino....??"			
-			set retorno 1
+			}
+			puts "paso4"
 		}
+		puts "paso5"
+		#eliminar registro de actividad term
+		db_dml eliminar_actividad_term {}
+		puts "paso6"
+		#eliminar registro de actividad
+		db_dml eliminar_actividad {}
+		puts "paso7"
+		set retorno 1
+		 	
 	} on_error {
 		set retorno -1
 	}
@@ -202,18 +216,40 @@ ad_proc -public td_inac_procs::obtener_id_cal_item_por_actividad {
 } {
 } {
 	db_transaction {
-		set retorno [db_list_of_lists obtener_id_cal_item_por_actividad {}]
+		set retorno [db_string obtener_id_cal_item_por_actividad {}]
 	} on_error {
 		set retorno -1
 	}
 	return $retorno
 }
 
+ad_proc -public td_inac_procs::obtener_id_term_actividad_por_actividad {
+	-id_actividad
+} {
+	devuelve el id_term_actividad de una actividad especifica
+} {
+	db_transaction {
+		set retorno [db_list_of_lists obtener_id_term_actividad_por_actividad {}]
+	} on_error {
+		set retorno -1
+	}
+	return $retorno
+}
+
+
 ad_proc -public td_inac_procs::seleccionar_actividad {
 	-id_actividad
 } {
 } {
 	return [db_list_of_lists seleccionar_actividad {}] 
+}
+
+ad_proc -public td_inac_procs::seleccionar_actividad_publicacion {
+	-id_actividad
+} {
+	Devuelve los nombre de los calendarios de las comunidades
+} {
+	return [db_list_of_lists seleccionar_actividad_publicacion {}] 
 }
 
 ad_proc -public td_inac_procs::seleccionar_actividad_para_ver {
@@ -351,8 +387,8 @@ ad_proc -public td_inac_procs::seleccionar_periodos_por_calendario_para_grid {
 }
 
 ad_proc -public td_inac_procs::seleccionar_actividades_por_calendario {
-	-id_calendario
 	-multirow
+	-id_calendario	
 } {
 } {
 	return [db_multirow $multirow seleccionar_actividades_por_calendario {}]

@@ -92,12 +92,12 @@ ad_proc -public td_categorias::seleccionar_categorias_para_grid {
 	}
 }
 
-ad_proc -public td_categorias::seleccionar_categorias_por_modalidad {
-	-id_modalidad
+ad_proc -public td_categorias::seleccionar_categorias_lista {
+  {-term_id:required}
 } {
 } {
 	db_transaction {
-		set lista [db_list_of_lists seleccionar_categorias_por_modalidad {}]
+		set lista [db_list_of_lists seleccionar_categorias_lista {}]
 	} on_error {
 		set lista -1
 	}
@@ -161,6 +161,10 @@ ad_proc -public td_categorias::modificar_categoria {
 	db_transaction {
 	    #Realiza la actualizacion
 		db_dml modificar_categoria {}
+		#elimina publicacion del calendar y elimina los datos de cal_actividad
+		
+		#ingresa la nueva publicacion e ingresa los datos en cal_actividad
+		
 		
 		#Almacena el valor de salida
 		set salida 1;
@@ -196,10 +200,14 @@ ad_proc -public td_categorias::seleccionar_modalidades_por_categoria {
 
 ad_proc -public td_categorias::seleccionar_actividades_temporales  {
 	-multirow
+	-sql_query	
 } {
 } {
-	db_transaction {	
+	
+	db_transaction {
+		
 		return [db_multirow $multirow seleccionar_actividades_temporales {}]
+		
 	} on_error {
 		return -1
 	}
@@ -244,6 +252,8 @@ ad_proc -public td_categorias::insertar_actividades_temporales  {
 	-id_categoria
 	-id_modalidad
 	-id_periodo
+	-comunidades
+	-estado_publicacion
 } {
 } {
 	db_transaction {
@@ -255,7 +265,7 @@ ad_proc -public td_categorias::insertar_actividades_temporales  {
 		
 		} else {
 			
-			set id_actividad [td_categorias::insertar_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -estado_publicacion 0]
+			set id_actividad [td_categorias::insertar_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -comunidades $comunidades -estado_publicacion $estado_publicacion]
 			if { $id_actividad > 0 } {				
 				#db_dml insertar_actividades_temporales {}
 				set retorno 1
@@ -398,33 +408,100 @@ ad_proc -public td_categorias::modificar_actividad {
 	-id_actividad	
 	-nom_actividad
 	-dsc_actividad
-	-id_categoria
-	-id_modalidad
-	-id_periodo
+	-term_id
+	-id_categoria	
 	-fecha_inicio
 	-fecha_final
-	-id_calendario
+	-comunidades
+	-estado_publicacion
 } {
+	
 } {	
 	db_transaction {
-		if { $id_modalidad == "O" } {
-			set repetidas ""
-		} else {
-			set repetidas [db_list_of_lists validar_actividad_con_no_temporales {}]
-		}		
-		if {[llength $repetidas] != 0 } {
-			set salida -2
-		} else { 
-			set repetidas [db_list_of_lists validar_actividad_con_no_temporales_especial {}]
-			if {[llength $repetidas] != 0 } {
-				set salida -2
-			} else {
-				set estado_publicacion [td_categorias::obtener_estado_publicacion -id_actividad $id_actividad]
-				td_inac_procs::eliminar_actividad -id_actividad $id_actividad -estado_publicacion $estado_publicacion
-				td_categorias::insertar_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -estado_publicacion $estado_publicacion
-				set salida 1
+		puts "entro a modificar actividad  $id_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_periodo $term_id -fecha_inicio $fecha_inicio -fecha_final $fecha_final -comunidades $comunidades -estado_publicacion $estado_publicacion"
+			
+		#modificar los valores de la actividad
+		db_dml modificar_actividad {}
+		
+		#modificar actividad_term
+		set id_term_actividad [db_string  modificar_actividad_term {}]
+		
+		#consultar las comunidades de los calendarios		
+		set lista_cal_item_ids [td_inac_procs::obtener_id_cal_item_por_actividad -id_actividad $id_actividad]
+		set publicaciones [td_inac_procs::seleccionar_actividad_publicacion -id_actividad $id_actividad]
+		set estado_original [lindex $publicaciones 0 2]
+		
+		puts "publicaciones aqui $lista_cal_item_ids  estado original $estado_original y nuevo estado es $estado_publicacion"
+		
+		db_dml eliminar_cal_actividad {}
+		
+		#recorrer las cal_item_id de las comunidades de los calendarios para ser eliminados
+		if { $lista_cal_item_ids != -1 } {
+			foreach cal_item_id $lista_cal_item_ids {
+				if { $cal_item_id != "" } {	
+					calendar::item::get -cal_item_id $cal_item_id -array cal_item
+					calendar::item::delete -cal_item_id $cal_item_id
+					calendar::item::delete_recurrence -recurrence_id $cal_item(recurrence_id)
+					puts "cal_item_id es $cal_item_id"
+				}	
 			}
 		}
+				
+		#si va a publicar
+		if { $estado_publicacion == 1} {
+			
+			set s $nom_actividad
+			set date $fecha_inicio
+			set ansi_date $date
+			set date [calendar::from_sql_datetime -sql_date $ansi_date  -format "YYY-MM-DD"]
+			set start_time 7
+			set start_minutes 30
+			set start_hour $start_time
+			set start_time "{} {} {} $start_time $start_minutes {} {HH24:MI}"
+			set end_hour 16
+			set end_minutes 30
+			set end_time "{} {} {} $end_hour $end_minutes {} {HH24:MI}"
+			set time_p 1
+			set start_date [calendar::to_sql_datetime -date $date -time $start_time -time_p $time_p]
+			set end_date [calendar::to_sql_datetime -date $date -time $end_time -time_p $time_p]
+	           
+			#Insertar actividad en el calendario del calendars
+			foreach calendar_id $comunidades {
+				
+				set cal_item_id [calendar::item::new -start_date $start_date -end_date $end_date -name $nom_actividad -description $dsc_actividad -calendar_id $calendar_id]
+				if { $fecha_inicio >= $fecha_final } {
+					set repeat_p 0
+				} else {
+					set repeat_p 1
+				}
+				# Fecha inicio < que ficha final
+				if { $repeat_p == 1 } {
+					set recur_until $fecha_final
+					set recur_until [calendar::from_sql_datetime -sql_date $recur_until  -format "YYY-MM-DD"]
+					set interval_type "day"
+					set every_n 1
+					calendar::item::add_recurrence \
+						-cal_item_id $cal_item_id \
+						-interval_type $interval_type \
+						-every_n $every_n \
+						-recur_until [calendar::to_sql_datetime -date $recur_until -time "" -time_p 0]
+				}
+				#insertar en cal_actividad
+				#id_term_activad, calendar_id, estado_publicacion, cal_item_id	
+				db_dml insertar_cal_actividad {}			
+			}
+		} else { 
+					
+			#Insertar insertar_cal_actividad
+			foreach calendar_id $comunidades {
+				
+				set cal_item_id ""
+				db_dml insertar_cal_actividad {}
+			}
+		}
+		
+		set salida 1
+		
 	} on_error {
 		set salida -1
 	}
@@ -440,17 +517,14 @@ ad_proc -public td_categorias::insertar_actividad {
 	-fecha_inicio
 	-fecha_final
 	-id_calendario
+	-comunidades
 	-estado_publicacion
 } {
 } {
 	db_transaction {
 		puts "===================............. INICIO PROCESO DE INSERCION...."	
 		if { $estado_publicacion } {
-		#===== Se seleccionan las dos comunicades comunidades donde se puede publicar
-			#db_1row profesores { select calendar_id as profesores from calendars where calendar_name = 'Profesores ITCR' }
-			#db_1row estudiantes { select calendar_id as estudiantes from calendars where calendar_name = 'Estudiantes ITCR' }
-		#=====================================
-			#db_1row funcionarios { select calendar_id as funcionarios from calendars where calendar_name = 'Funcionarios ITCR' }
+		
 			set s $nom_actividad
 			set date $fecha_inicio
 			set ansi_date $date
@@ -465,40 +539,58 @@ ad_proc -public td_categorias::insertar_actividad {
 			set time_p 1
 			set start_date [calendar::to_sql_datetime -date $date -time $start_time -time_p $time_p]
 			set end_date [calendar::to_sql_datetime -date $date -time $end_time -time_p $time_p]
-			set cal_item_funcionario_id [calendar::item::new -start_date $start_date -end_date $end_date -name $nom_actividad -description $dsc_actividad -calendar_id $funcionarios]
-			if { $fecha_inicio >= $fecha_final } {
-				set repeat_p 0
-			} else {
-				set repeat_p 1
-			}
-			# Fecha inicio < que ficha final
-			if { $repeat_p == 1 } {
-				set recur_until $fecha_final
-				set recur_until [calendar::from_sql_datetime -sql_date $recur_until  -format "YYY-MM-DD"]
-				set interval_type "day"
-				set every_n 1
-				calendar::item::add_recurrence \
-					-cal_item_id $cal_item_funcionario_id \
-					-interval_type $interval_type \
-					-every_n $every_n \
-					-recur_until [calendar::to_sql_datetime -date $recur_until -time "" -time_p 0]
-			}
-			set id_actividad [ db_string insertar_actividad_publicada {} ]
-			db_dml insertar_actividad_term {}
-			db_dml insertar_termsxactividad {}
-
-			if {$id_modalidad != "O"} {
-				db_dml insertar_periodoxactividad {}
-			}
-
-		} else { 
-			# ===== AUN NO SE VA A PUBLICAR ========
+			
 			# Insertar actividad
             puts "===========........ Se va a insertar la actividad..."
 			set id_actividad [ db_string insertar_actividad {} ]
-            puts "===========........ Se inserto la actividad... RESULTADO $id_actividad"
+            
+            
             # Insertar fechas y periodo de actividad
-			db_dml insertar_actividad_term {}
+			set id_term_activad [db_string insertar_actividad_term {}]
+			
+			#Insertar actividad en el calendario del calendars
+			foreach calendar_id $comunidades {
+				
+				set cal_item_id [calendar::item::new -start_date $start_date -end_date $end_date -name $nom_actividad -description $dsc_actividad -calendar_id $calendar_id]
+				if { $fecha_inicio >= $fecha_final } {
+					set repeat_p 0
+				} else {
+					set repeat_p 1
+				}
+				# Fecha inicio < que ficha final
+				if { $repeat_p == 1 } {
+					set recur_until $fecha_final
+					set recur_until [calendar::from_sql_datetime -sql_date $recur_until  -format "YYY-MM-DD"]
+					set interval_type "day"
+					set every_n 1
+					calendar::item::add_recurrence \
+						-cal_item_id $cal_item_id \
+						-interval_type $interval_type \
+						-every_n $every_n \
+						-recur_until [calendar::to_sql_datetime -date $recur_until -time "" -time_p 0]
+				}
+				db_dml insertar_cal_actividad {}
+				
+			}			
+
+		} else { 
+			
+			# ============================
+			# AUN NO SE VA A PUBLICAR
+			# ============================
+			# Insertar actividad
+            puts "===========........ Se va a insertar la actividad..."
+			set id_actividad [ db_string insertar_actividad {} ]
+            #puts "===========........ Se inserto la actividad... RESULTADO $id_actividad"
+            # Insertar fechas y periodo de actividad
+			
+			set id_term_actividad [db_string insertar_actividad_term {}]
+			
+			#Insertar insertar_cal_actividad
+			foreach calendar_id $comunidades {
+				set cal_item_id ""
+				db_dml insertar_cal_actividad {}
+			}
             
 			
 		}

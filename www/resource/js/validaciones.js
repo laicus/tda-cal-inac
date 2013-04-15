@@ -83,7 +83,7 @@ function validar(elemento, tipo){
 
 //validaciones insertar y modificar actividades 
 
-function validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_inicio,anio){
+function validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_inicio,anio, comunidades){
 	if( nom_actividad.length > 500 ){
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: El nombre de la actividad es inválido.No puede tener mas de 500 carácteres.</h2>";
 		return false;
@@ -104,10 +104,10 @@ function validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_i
 		return false;
 	}
 
-	if (validar_fecha_con_anio (fecha_inicio, anio) != 1) {
+	/*if (validar_fecha_con_anio (fecha_inicio, anio) != 1) {
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: El año de la fecha de inicio debe coincidir con el año del calendario ("+anio+").</h2>";
 		return false;
-	}
+	}*/
 
 	if (validar_fecha(fecha_final) != 1) {
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Formato inválido en la fecha final.</h2>";
@@ -128,7 +128,14 @@ function validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_i
 	if (fecha_inicio.length == 0){
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Fecha de inicio inválido.</h2>";
 		return false;
-	} 
+	}
+	
+	if (comunidades == ""){
+		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: No se seleccionó ninguna comunidad.</h2>";
+		return false
+	}
+	
+	 
 	return true;
 }
 

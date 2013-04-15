@@ -7,14 +7,15 @@ ad_page_contract {
 	id_actividad:notnull
 	nom_actividad:notnull
 	dsc_actividad:notnull
-	id_categoria:notnull
-	id_modalidad:notnull
-	id_periodo:notnull
+	term_id:notnull
+	id_categoria:notnull	
 	fecha_inicio:notnull
 	fecha_final:notnull
-	id_calendario:notnull
+	comunidades:notnull
+	estado_publicacion:notnull	
+	
 }
 
-set res [td_categorias::modificar_actividad -id_actividad $id_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final  $fecha_final -id_calendario $id_calendario]
+set res [td_categorias::modificar_actividad -id_actividad $id_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -term_id $term_id -id_categoria $id_categoria -fecha_inicio $fecha_inicio -fecha_final  $fecha_final -comunidades $comunidades -estado_publicacion $estado_publicacion]
 
 ns_write $res

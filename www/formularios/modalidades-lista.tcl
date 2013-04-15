@@ -19,7 +19,7 @@ if { $es_modificar == 0 } {
 		-label "Modalidades:" \
 		-datatype text \
 		-widget select \
-    	-html { style "width:150px" onChange "document.frm_seccion_periodos.cmb_periodos.disabled = true; javascript:cargarPeriodos(0,1);  document.frm_seccion_categorias.cmb_categorias.disabled = true;" disable "false"} \
+    	-html { style "width:150px" onChange "javascript:cargarPeriodos(0,1);  javascript:cargar_actividades();"} \
 		-optional \
 		-options [concat { {"TODOS" "%"} } [td_inac_procs::seleccionar_modalidades_por_calendario -id_calendario $id_calendario]]
 	} else {

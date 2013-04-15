@@ -6,6 +6,6 @@ ad_page_contract {
 } {
 	id_actividad:notnull
 }
-
+puts "entro a especifica"
 set res [td_calendarios::despublicar_actividad -id_actividad $id_actividad]
 ns_write $res

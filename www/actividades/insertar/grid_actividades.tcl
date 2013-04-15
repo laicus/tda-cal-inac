@@ -17,7 +17,9 @@ ad_page_contract {
 	id_categoria:optional
 	id_modalidad:optional
 	id_periodo:optional
-	{accion "nada"}
+	comunidades:optional
+	estado_publicacion:optional
+	{accion: "nada"}
 }
 set msn ""
 
@@ -25,8 +27,8 @@ puts "=========........... accion a realizar $accion "
 
 if {$accion == "insertar"} {
 	puts "----------------- ANTES DE TRATAR DE INSERTAR......"	
-	set res [td_categorias::insertar_actividades_temporales -nom_actividad $nom_actividad -nom_categoria $nom_categoria -dsc_actividad $dsc_actividad -nom_modalidad $nom_modalidad -nom_periodo $nom_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -calendario $calendario -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo ]
-	puts "----------------- $res"	
+	set res [td_categorias::insertar_actividades_temporales -nom_actividad $nom_actividad -nom_categoria $nom_categoria -dsc_actividad $dsc_actividad -nom_modalidad $nom_modalidad -nom_periodo $nom_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -calendario $calendario -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -comunidades $comunidades -estado_publicacion $estado_publicacion]
+	puts "----------------- $res"
 
 	if { $res == 1 } {
 		set  msn "<h2 style='color:#000066'>La inserción fue realizada de manera correcta.</h2>";
@@ -39,6 +41,7 @@ if {$accion == "insertar"} {
 	} else {
 		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, error desconocido.</h2>";
 	}
+	
 }
 
 if {$accion == "eliminar"} {
@@ -59,41 +62,7 @@ if {$accion == "eliminar"} {
 	}
 }
 
-set columnas {
-	nom_actividad {
-	  label "Actividad"
-	}
-	nom_categoria {
-	  label "Categoría"
-	}
-	nom_modalidad {
-	  label "Modalidad"
-	}
-  	nom_periodo {
-	  label "Periodo"
-	}
-  	fecha_inicio {
-	  label "Inicia (año-mes-día)"
-	}
-  	fecha_final {
-	  label "Termina (año-mes-día)"
-	}
-  	calendario {
-	  label "Calendario"
-	}
-	acciones { 
-		label "Eliminar" 
-		display_template { <center> <nobr> <a href=\"javascript:eliminar_actividad_temporal('@actividades.id_actividad@')"\>Eliminar</a> </nobr> </center> }
-	}
-}
 
-template::list::create \
-    -name grid_actividades \
-    -multirow actividades \
-    -key id_categoria_temporal \
-    -elements $columnas
-
-td_categorias::seleccionar_actividades_temporales -multirow actividades
 
 ad_form -name frm_mensaje -has_submit 1 -form {
     {mensaje:string(hidden) 

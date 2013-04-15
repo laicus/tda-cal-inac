@@ -5,7 +5,7 @@ ad_page_contract {
     @creation-date 24-10-2008
     @cvs-id $Id$
 } {
-	id_modalidad:notnull
+	term_id:notnull	
 	es_modificar:notnull
 	es_ver:notnull
 }
@@ -22,7 +22,7 @@ if { $es_modificar == 0 } {
 		    -widget select \
 		    -html { style "width:150px" onChange "javascript:cargar_actividades()" } \
 		    -optional \
-		    -options [concat { {"TODOS" "%"} } [td_categorias::seleccionar_categorias_por_modalidad -id_modalidad $id_modalidad]]
+		    -options [concat { {"TODOS" "%"} } [td_categorias::seleccionar_categorias_lista -term_id $term_id ]]
 	} else {
 		element create frm_seccion_categorias cmb_categorias \
 		    -label "Categoría:" \

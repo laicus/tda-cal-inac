@@ -94,110 +94,93 @@ function RespuestaDesPublicarActividad()
 function eliminar_actividad()
 {
 
-var id_actividad = document.getElementById("id_actividad").value;
+	var id_actividad = document.getElementById("id_actividad").value;
     gConexionActividades = CrearXmlHttp();
-
-alert("entro aqui... eliminar_actividad");
 
     if (gConexionActividades == null)
     {
 	return;	
     }
-    
-   gConexionActividades.onreadystatechange = RespuestaEliminarActividad;
-
-alert("salio de RespuestaEliminarActividad va para actividades/ver/eliminar_actividad_especifica?id_actividad=" + id_actividad);   
-   
-   gConexionActividades.open("GET", "actividades/ver/eliminar_actividad_especifica?id_actividad=" + id_actividad, true);
-   gConexionActividades.send(null);
+    gConexionActividades.onreadystatechange = RespuestaEliminarActividad;
+    gConexionActividades.open("GET", "actividades/ver/eliminar_actividad_especifica?id_actividad=" + id_actividad, true);
+    gConexionActividades.send(null);
 }
  
-function RespuestaEliminarActividad()
-{
+function RespuestaEliminarActividad() {
     if (gConexionActividades.readyState == 4)
     {
-	if (gConexionActividades.status == 200)
-	{	
-
-
-alert("entra a RespuestaEliminarActividad");
-
-		var respuesta = gConexionActividades.responseText;
-		if (respuesta == "1") {
-
-alert("respuesta fue 1");
-
-			if (document.getElementById("id_calendario") == null){
-				cargarURLParametro("actividades/ver/ver?", "id_categoria="+ id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
-			}else {
-				var id_calendario = document.getElementById("id_calendario").value;
-
-alert("Entro pq calendario NO es nulo.... va para calendarios/ver/ver_actividades_de_calendario a modificar_actividades..... RARO....")				
-				cargarURLParametro("calendarios/ver/ver_actividades_de_calendario?", "id_calendario="+id_calendario, "modificar_actividades");	
-			}
-			document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
-		} else if ( respuesta == "-1" ) {
-			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>";
-
-		} 
-		
-
+		if (gConexionActividades.status == 200) {
+			var respuesta = gConexionActividades.responseText;
+			if (respuesta == "1") {
+				if (document.getElementById("id_calendario") == null){
+					cargarURLParametro("actividades/ver/ver?", "id_categoria="+ id_cat_g+"&id_modalidad="+ id_mod_g+"&id_periodo="+id_per_g+"&id_calendario="+id_cal_g, "pagina");
+				}else {
+					var id_calendario = document.getElementById("id_calendario").value;
+					cargarURLParametro("calendarios/ver/ver_actividades_de_calendario?", "id_calendario="+id_calendario, "modificar_actividades");	
+				}
+				document.getElementById("resultado").innerHTML = "<h2 style='color:#000066'>Eliminación exitosa.</h2>";
+			} else if ( respuesta == "-1" ) {
+				document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Eliminación fallida: Error de conexión con la base de datos.</h2>";
+			} 
+		}
 	}
-alert("respuesta fue diferente de 1");
-	
-    }
 }
+
+/*==============================================
+ * Modificar Actividad
+ * funciones para modificar actividades
+ * =============================================*/
 
 function modificar_actividad(id_actividad,origen)
 {
+	//variables
 	gConexionActividades = CrearXmlHttp();
-
+	var comunidades = ""; //para las comuidades del calendario
+	//validación de conexión
 	if (gConexionActividades == null)
 	{
 		return;	
 	}
-
-	var es_especial = 0;
-	var nom_actividad = document.getElementById("txt_nombre_actividad").value;
-	var id_modalidad = document.getElementById("cmb_modalidades").value;
-	var id_periodo = document.getElementById("cmb_periodos").value;
+	//Obtener datos del formulario
+	
 	var id_actividad = document.getElementById("id_actividad").value;
-
-
-	if (id_periodo == "") {
-		if (id_modalidad != "O") {
-			document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Período inválido.</h2>";
-		return;
-		}else{
-			id_periodo = "No Aplica";
-			es_especial = 1;
-		}
-	} 
-
-	var id_calendario = document.getElementById("cmb_calendarios").value;
-
-	if (id_calendario.length == 0){
-		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Calendario inválido.</h2>";
-		return false;
-	}
+	var nom_actividad = document.getElementById("txt_nombre_actividad").value;
+	var dsc_actividad = document.getElementById("txt_dsc_actividad").value;
 	var anio = document.getElementById("cmb_calendarios").options[document.getElementById("cmb_calendarios").selectedIndex].innerHTML;
-
+	var id_periodo = document.getElementById("cmb_periodos").value;
 	var id_categoria = document.getElementById("cmb_categorias").value
 	var fecha_inicio = document.getElementById("fecha_inicio").value;
 	var fecha_final = document.getElementById("fecha_final").value;
-	var dsc_actividad = document.getElementById("txt_dsc_actividad").value;
+	
+	//validar en caso de que no se elija fecha final	
 	if ( fecha_final.length == 0 ) {
 		fecha_final = fecha_inicio;
 	}
-
-	if(validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_inicio,anio)) {
+	
+	//Obtener comunidades de los calendarios 
+	if($("input[name=chk_comunidad1]").is(':checked'))
+	{		
+		comunidades = comunidades + $("input[name=chk_comunidad1]").val() + " ";				
+	} 
+	if ($("input[name=chk_comunidad2]").is(':checked'))
+	{		
+		comunidades = comunidades + $("input[name=chk_comunidad2]").val() + " ";				
+	} 
+	if ($("input[name=chk_comunidad3]").is(':checked'))
+	{		
+		comunidades = comunidades + $("input[name=chk_comunidad3]").val() + " ";
+	}
+	
+	var estado_publicacion = $("input[name='rad_publicacion']:checked").val();
+	
+	if(validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_inicio,anio, comunidades)) {
 		if ( dsc_actividad.length == 0 ) {
 			dsc_actividad = "  ";
 		}
 
 		gConexionActividades.onreadystatechange = RespuestaModificarActividad;
 		
-		gConexionActividades.open("GET", "actividades/ver/modificar_actividad_especifica?id_actividad=" + id_actividad + "&nom_actividad="+nom_actividad+"&dsc_actividad="+dsc_actividad+"&id_categoria="+id_categoria+"&id_modalidad="+id_modalidad+"&id_periodo="+id_periodo+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&id_calendario="+id_calendario, true);
+		gConexionActividades.open("GET", "actividades/ver/modificar_actividad_especifica?id_actividad=" + id_actividad + "&nom_actividad="+nom_actividad+"&dsc_actividad="+dsc_actividad+"&id_categoria="+id_categoria+"&term_id="+id_periodo+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&comunidades="+comunidades+"&estado_publicacion="+estado_publicacion, true);
 		gConexionActividades.send(null);
 	}
 }
@@ -276,6 +259,7 @@ function InsertarActividad(){
 
 	var id_calendario = document.getElementById("cmb_calendarios").value;
 	var id_modalidad = document.getElementById("cmb_modalidades").value;
+	var comunidades = "";
 	
 	if (id_calendario.length == 0){
 		document.getElementById("resultado").innerHTML = "<h2 style='color:#990000'>Error: Calendario inválido.</h2>";
@@ -296,7 +280,27 @@ function InsertarActividad(){
 		nom_periodo = document.getElementById("cmb_periodos").options[document.getElementById("cmb_periodos").selectedIndex].innerHTML;
 		var id_periodo = document.getElementById("cmb_periodos").value;
 	}
-
+	
+	
+	if($("input[name=chk_comunidad1]").is(':checked'))
+	{
+		
+		comunidades = comunidades + $("input[name=chk_comunidad1]").val() + " ";
+				
+	} 
+	if ($("input[name=chk_comunidad2]").is(':checked'))
+	{
+		
+		comunidades = comunidades + $("input[name=chk_comunidad2]").val() + " ";
+				
+	} 
+	if ($("input[name=chk_comunidad3]").is(':checked'))
+	{
+		
+		comunidades = comunidades + $("input[name=chk_comunidad3]").val() + " ";
+				
+	}
+		
 	var nom_categoria = document.getElementById("cmb_categorias").options[document.getElementById("cmb_categorias").selectedIndex].innerHTML;
 	var id_categoria = document.getElementById("cmb_categorias").value;
 	var fecha_inicio = document.getElementById("fecha_inicio").value;
@@ -307,31 +311,34 @@ function InsertarActividad(){
 	if(fecha_final.length == 0 ){
 		fecha_final = fecha_inicio;
 	}
+	
+	var estado_publicacion = $("input[name='rad_publicacion']:checked").val();
+	//alert(publicacion + " " + comunidades);
 
-	if(validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_inicio,anio)) {
-
-		var url = "actividades/insertar/grid_actividades?nom_actividad="+nom_actividad +"&dsc_actividad="+dsc_actividad+"&nom_modalidad="+nom_modalidad+"&nom_periodo="+nom_periodo+"&nom_categoria="+nom_categoria+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&id_calendario="+id_calendario+"&calendario="+anio+"&id_categoria="+id_categoria+"&id_modalidad="+id_modalidad+"&id_periodo="+id_periodo+"&accion=insertar";
+	if(validar_info_actividad(nom_actividad,dsc_actividad ,fecha_final,fecha_inicio,anio, comunidades)) {
+		
+		var url = "actividades/insertar/grid_actividades?nom_actividad="+nom_actividad +"&dsc_actividad="+dsc_actividad+"&nom_modalidad="+nom_modalidad+"&nom_periodo="+nom_periodo+"&nom_categoria="+nom_categoria+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&id_calendario="+id_calendario+"&calendario="+anio+"&id_categoria="+id_categoria+"&id_modalidad="+id_modalidad+"&id_periodo="+id_periodo+"&comunidades="+comunidades+"&estado_publicacion="+estado_publicacion+"&accion=insertar";
 
 		gConexionActividades.onreadystatechange = respuesta_insertar_actividad_temporal;
 		gConexionActividades.open("GET", url, true);
 		gConexionActividades.send(null);
+		
 	}
 }
 
 
 function respuesta_insertar_actividad_temporal()
 {
-
-    if (gConexionActividades.readyState == 4)
-    {
-	if (gConexionActividades.status == 200)
-	{
+     if ((gConexionActividades.readyState == 4) && (gConexionActividades.status == 200)){
+      
 		var respuesta = gConexionActividades.responseText;
-		
+		volver_ver_actividades();
 	   	document.getElementById("grid_actividades").innerHTML = respuesta;
 		document.getElementById("resultado").innerHTML = document.getElementById("mensaje").value;
+		var msj = document.getElementById("mensaje").value;
+		alert(msj);
 
-	}
+
     }
 }
 
@@ -418,7 +425,7 @@ function cargar_actividades () {
 	var id_periodo = document.getElementById("cmb_periodos").value;
 	var id_modalidad = document.getElementById("cmb_modalidades").value;
 	var id_calendario = document.getElementById("cmb_calendarios").value;
-
+    //alert("hola");
 	var url = "actividades/ver/resultados?";
 	var parametros = "id_categoria="+id_categoria+"&id_modalidad="+ id_modalidad+"&periodo="+id_periodo+"&id_calendario="+id_calendario +"&accion=ver";
 	document.getElementById("resultado").innerHTML =  "";
@@ -451,10 +458,10 @@ function cargar_form_ver_actividad(id_actividad,es_especial)
 	document.getElementById("resultado").innerHTML =  "";
 }
 
-function cargar_form_eliminar_actividad(id_actividad,es_especial)
+function cargar_form_eliminar_actividad(id_actividad)
 {
 	var url = "actividades/ver/eliminar_actividad?";
-	var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
+	var parametros = "id_actividad="+id_actividad;
 	
 	id_cat_g = document.getElementById("cmb_categorias").value;
 	id_per_g = document.getElementById("cmb_periodos").value;
@@ -520,13 +527,13 @@ function cargar_form_despublicar_actividad(id_actividad,es_especial)
 function cargar_form_modificar_actividad(id_actividad,es_especial)
 {
 	var url = "actividades/ver/modificar_actividad?";
-	var parametros = "id_actividad="+id_actividad +"&es_especial="+es_especial;
+	var parametros = "id_actividad="+id_actividad;
 
 	id_cat_g = document.getElementById("cmb_categorias").value;
 	id_per_g = document.getElementById("cmb_periodos").value;
 	id_mod_g = document.getElementById("cmb_modalidades").value;
 	id_cal_g = document.getElementById("cmb_calendarios").value;
-
+	
 	if (document.getElementById("id_calendario") == null){
 		cargarURLParametro(url, parametros, 'pagina');
 	} else {

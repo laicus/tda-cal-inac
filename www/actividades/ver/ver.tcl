@@ -34,7 +34,7 @@ element create frm_seccion_general cmb_calendarios \
     -datatype text \
     -widget select \
 	-optional \
-    -html { style "width:150px"  onChange "javascript:CargarModalidadXCalendario(0,1); javascript:cargar_actividades(); document.frm_seccion_modalidades.cmb_modalidades.disabled = false; document.frm_seccion_periodos.cmb_periodos.disabled = true; document.frm_seccion_categorias.cmb_categorias.disabled = true;" } \
+    -html { style "width:150px"  onChange "javascript:CargarModalidadXCalendario(0,1); javascript:cargar_actividades();" } \
     -options $lista_calendarios \
     -value $id_calendario
 
@@ -46,7 +46,7 @@ element create frm_seccion_modalidades cmb_modalidades \
     -datatype text \
     -widget select \
 	-optional \
-    -html { style "width:150px" onChange "document.frm_seccion_periodos.cmb_periodos.disabled = true; javascript:cargarPeriodos(0,1); document.frm_seccion_categorias.cmb_categorias.disabled = true; " disabled "disabled"} \
+    -html { style "width:150px" onChange "javascript:cargarPeriodos(0,1); javascript:cargar_actividades();"} \
     -options $list_modalidades \
     -value $id_modalidad
 
@@ -57,7 +57,7 @@ element create frm_seccion_periodos cmb_periodos \
     -datatype text \
     -widget select \
 	-optional \
-    -html { style "width:150px" onChange "document.frm_seccion_categorias.cmb_categorias.disabled = false; javascript:cargarCategorias(0,1);" disabled "disabled"} \
+    -html { style "width:150px" onChange "cargarCategorias(0,1); cargar_actividades();"} \
     -options $list_periodos \
     -value $id_periodo
 
@@ -69,7 +69,7 @@ element create frm_seccion_categorias cmb_categorias \
     -datatype text \
     -widget select \
 	-optional \
-    -html { style "width:150px" onChange "javascript:cargar_actividades()" disabled "disabled"} \
+    -html { style "width:150px" onChange ""} \
     -options $list_categorias \
     -value $id_categoria
 

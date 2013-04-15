@@ -15,15 +15,21 @@
     </querytext> 
   </fullquery>
     
-  <fullquery name="td_categorias::seleccionar_categorias_por_modalidad.seleccionar_categorias_por_modalidad"> 
+  <fullquery name="td_categorias::seleccionar_categorias_lista.seleccionar_categorias_lista"> 
     <querytext> 
-   	select td_sch_cal_inac.categoria .nom_categoria, td_sch_cal_inac.categoria.id_categoria 
-   	from td_sch_cal_inac.categoria 
-	    inner join td_sch_cal_inac.modalidad_categoria
-	    on td_sch_cal_inac.categoria.id_categoria = td_sch_cal_inac.modalidad_categoria.id_categoria
-	        inner join td_sch_cal_inac.modalidad 
-	        on td_sch_cal_inac.modalidad.id_modalidad = td_sch_cal_inac.modalidad_categoria.id_modalidad
-	where td_sch_cal_inac.modalidad.id_modalidad = :id_modalidad
+    
+	SELECT distinct	 
+	  categoria.nom_categoria, 
+	  categoria.id_categoria 
+	FROM 
+	  td_sch_cal_inac.actividad, 
+	  td_sch_cal_inac.actividad_term, 
+	  public.dotlrn_terms, 
+	  td_sch_cal_inac.categoria
+	WHERE 
+	  actividad.id_categoria = categoria.id_categoria AND
+	  actividad_term.id_actividad = actividad.id_actividad AND
+	  actividad_term.term_id = :term_id
     </querytext> 
   </fullquery>  
 
@@ -233,7 +239,7 @@
     </querytext> 
   </fullquery>
 
-  <fullquery name="td_categorias::seleccionar_actividades_temporales.seleccionar_actividades_temporales"> 
+  <fullquery name="td_categorias::seleccionar_actividades_temporalesseleccionar_actividades_temporales.seleccionar_actividades_temporales"> 
     <querytext> 
 	    SELECT id_actividad, nom_actividad, dsc_actividad, nom_categoria, nom_modalidad, nom_periodo,
 	      fecha_inicio, fecha_final
@@ -277,9 +283,31 @@
 
  <fullquery name="td_categorias::seleccionar_actividades_temporales.seleccionar_actividades_temporales"> 
     <querytext> 
- 	    SELECT id_actividad, nom_actividad, dsc_actividad, nom_categoria, nom_modalidad, nom_periodo, 
- 	        fecha_inicio, fecha_final, id_calendario, calendario 
- 	    FROM td_cal_inac_actividades_temporal
+ 	   SELECT distinct
+		  actividad.id_actividad,
+		  actividad.nom_actividad,
+		  categoria.id_categoria,
+		  categoria.nom_categoria, 
+		  actividad_term.fecha_inicio, 
+		  actividad_term.fecha_fin,
+		  actividad.dsc_actividad,
+		  (dotlrn_terms.term_name || ', ' || dotlrn_terms.term_year) as periodo,
+		  split_part(dotlrn_terms.term_name,' ',1) as nom_modalidad,
+		  dotlrn_terms.term_id,
+		  dotlrn_terms.term_year,
+		  cal_actividad.estado_publicacion  
+		FROM 
+		  td_sch_cal_inac.actividad, 
+		  td_sch_cal_inac.actividad_term, 
+		  td_sch_cal_inac.cal_actividad, 
+		  public.dotlrn_terms, 
+		  td_sch_cal_inac.categoria
+		WHERE 
+		  actividad.id_categoria = categoria.id_categoria AND
+		  actividad_term.id_actividad = actividad.id_actividad AND
+		  actividad_term.term_id = dotlrn_terms.term_id AND
+		  cal_actividad.id_term_actividad = actividad_term.id_term_actividad 
+		  $sql_query
     </querytext> 
   </fullquery>
 
@@ -372,6 +400,7 @@
     <querytext> 
 	    INSERT INTO td_sch_cal_inac.actividad_term (id_actividad, term_id, fecha_inicio, fecha_fin) 
 		VALUES (:id_actividad, :id_periodo, :fecha_inicio, :fecha_final)
+		RETURNING id_term_actividad;
     </querytext> 
   </fullquery>
   
@@ -393,7 +422,13 @@
     </querytext> 
   </fullquery>
 
- 
+ <fullquery name="td_categorias::insertar_actividad.insertar_cal_actividad"> 
+    <querytext> 
+	    INSERT INTO td_sch_cal_inac.cal_actividad (id_term_actividad, calendar_id, estado_publicacion, cal_item_id)
+	    VALUES (:id_term_actividad, :calendar_id, :estado_publicacion, :cal_item_id)
+    </querytext>
+  </fullquery>
+
 
  <fullquery name="td_categorias::copiar_actividad.insertar_modalidadxactividad"> 
     <querytext> 
@@ -450,11 +485,12 @@
 
  <fullquery name="td_categorias::seleccionar_periodos_por_modalidad.seleccionar_periodos_por_modalidad"> 
     <querytext>	    
-		SELECT term.term_name, term.term_id
+		SELECT DISTINCT
+			term.term_name, term.term_id
 		FROM dotlrn_terms as term,
 			 td_sch_cal_inac.modalidad as cali
-		WHERE split_part(term.term_name, ' ', 1) = cali.nom_modalidad and
-			  cali.id_modalidad = :id_modalidad and term.term_year = :term_year
+		WHERE split_part(term.term_name, ' ', 1) = :id_modalidad AND
+		term.term_year = :term_year
     </querytext> 
   </fullquery>
 
@@ -473,4 +509,39 @@
 	    where id_actividad = :id_actividad
     </querytext> 
   </fullquery>
+  
+  
+  <fullquery name="td_categorias::modificar_actividad.modificar_actividad"> 
+    <querytext>     
+	   UPDATE td_sch_cal_inac.actividad 
+	   SET nom_actividad = :nom_actividad, dsc_actividad = :dsc_actividad, id_categoria = :id_categoria 
+	   WHERE id_actividad = :id_actividad   
+    </querytext> 
+  </fullquery>
+  
+  <fullquery name="td_categorias::modificar_actividad.modificar_actividad_term"> 
+    <querytext>	  
+	   UPDATE td_sch_cal_inac.actividad_term
+	   SET term_id = :term_id, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_final
+	   WHERE id_actividad = :id_actividad
+	   RETURNING id_term_actividad;
+    </querytext> 
+  </fullquery>
+  
+   <fullquery name="td_categorias::modificar_actividad.insertar_cal_actividad"> 
+    <querytext> 
+	    INSERT INTO td_sch_cal_inac.cal_actividad (id_term_actividad, calendar_id, estado_publicacion, cal_item_id)
+	    VALUES (:id_term_actividad, :calendar_id, :estado_publicacion, :cal_item_id)
+    </querytext>
+  </fullquery>
+ 
+   <fullquery name="td_categorias::modificar_actividad.eliminar_cal_actividad"> 
+    <querytext> 
+	    DELETE FROM td_sch_cal_inac.cal_actividad
+	    WHERE id_term_actividad = :id_term_actividad
+    </querytext>
+  </fullquery>
+
 </queryset> 
+
+
