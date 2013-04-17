@@ -152,134 +152,7 @@
 		  actividad_term.fecha_fin = :fecha_final AND
 		  actividad_term.term_id = :id_periodo
     </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::insertar_actividades_temporales.validar_actividad_con_no_temporales_especial"> 
-    <querytext> 
-        select td_cal_inac_actividades.id_actividad 
-        from td_cal_inac_actividades
-            inner join td_cal_inac_modalidadesxactividad
-            on td_cal_inac_modalidadesxactividad.id_actividad = td_cal_inac_actividades.id_actividad
-                inner join td_cal_inac_modalidades
-                on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad 
-                    and td_cal_inac_modalidades.id_modalidad = 'O'
-                    inner join td_cal_inac_categorias
-                    on td_cal_inac_categorias.id_categoria = td_cal_inac_actividades.id_categoria
-        where nom_actividad = :nom_actividad and nom_categoria = :nom_categoria 
-        and fecha_inicio = :fecha_inicio and nom_modalidad = :nom_modalidad
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::modificar_actividad.validar_actividad_con_no_temporales"> 
-    <querytext> 
-	    select td_sch_cal_inac.actividad.id_actividad 
-	    from td_sch_cal_inac.actividad 
-	        inner join td_cal_inac_periodosxactividades
-	        on td_cal_inac_periodosxactividades.id_actividad = td_cal_inac_actividades.id_actividad
-	            inner join td_admision_periodo 
-	            on td_admision_periodo.id_term = td_cal_inac_periodosxactividades.id_periodo
-	                inner join dotlrn_terms 
-	                on dotlrn_terms.term_id = td_admision_periodo.id_term
-                	    inner join td_cal_inac_modalidadesxactividad
-	                    on td_cal_inac_modalidadesxactividad.id_actividad = td_cal_inac_actividades.id_actividad
-                    	    inner join td_cal_inac_modalidades
-                    	    on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad
-	    where nom_actividad = :nom_actividad and td_cal_inac_actividades.id_categoria = :id_categoria 
-	        and fecha_inicio = :fecha_inicio and td_cal_inac_modalidades.id_modalidad = :id_modalidad 
-	        and td_admision_periodo.id_term = :id_periodo and (not td_cal_inac_actividades.id_actividad = :id_actividad)
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::modificar_actividad.validar_actividad_con_no_temporales_especial"> 
-    <querytext> 
-        select td_cal_inac_actividades.id_actividad 
-        from td_cal_inac_actividades
-            inner join td_cal_inac_modalidadesxactividad
-            on td_cal_inac_modalidadesxactividad.id_actividad = td_cal_inac_actividades.id_actividad
-                inner join td_cal_inac_modalidades
-                on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad 
-                and td_cal_inac_modalidades.id_modalidad = 'O'
-        where nom_actividad = :nom_actividad and td_cal_inac_actividades.id_categoria = :id_categoria 
-            and fecha_inicio = :fecha_inicio and td_cal_inac_modalidades.id_modalidad = :id_modalidad 
-            and (not td_cal_inac_actividades.id_actividad = :id_actividad)
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::validar_actividades.validar_actividad_con_no_temporales"> 
-    <querytext> 
-	    select td_cal_inac_actividades.id_actividad 
-	    from td_cal_inac_actividades 
-	        inner join td_cal_inac_periodosxactividades
-	        on td_cal_inac_periodosxactividades.id_actividad = td_cal_inac_actividades.id_actividad
-        	    inner join td_admision_periodo 
-	            on td_admision_periodo.id_term = td_cal_inac_periodosxactividades.id_periodo
-	                inner join dotlrn_terms
-	                on dotlrn_terms.term_id = td_admision_periodo.id_term
-                	    inner join td_cal_inac_modalidadesxactividad
-                	    on td_cal_inac_modalidadesxactividad.id_actividad = td_cal_inac_actividades.id_actividad
-                    	    inner join td_cal_inac_modalidades
-                    	    on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad
-	    where nom_actividad = :nom_actividad and td_cal_inac_actividades.id_categoria = :id_categoria 
-	        and fecha_inicio = :fecha_inicio and td_cal_inac_modalidades.id_modalidad = :id_modalidad 
-	        and td_admision_periodo.id_term = :id_periodo
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::validar_actividades.validar_actividad_con_no_temporales_especial"> 
-    <querytext> 
-        select td_cal_inac_actividades.id_actividad 
-        from td_cal_inac_actividades
-            inner join td_cal_inac_modalidadesxactividad
-            on td_cal_inac_modalidadesxactividad.id_actividad = td_cal_inac_actividades.id_actividad
-                inner join td_cal_inac_modalidades
-                on td_cal_inac_modalidades.id_modalidad = td_cal_inac_modalidadesxactividad.id_modalidad 
-                    and td_cal_inac_modalidades.id_modalidad = 'O'
-        where nom_actividad = :nom_actividad and td_cal_inac_actividades.id_categoria = :id_categoria 
-            and fecha_inicio = :fecha_inicio and td_cal_inac_modalidades.id_modalidad = :id_modalidad
-    </querytext> 
-  </fullquery>
-
-  <fullquery name="td_categorias::seleccionar_actividades_temporalesseleccionar_actividades_temporales.seleccionar_actividades_temporales"> 
-    <querytext> 
-	    SELECT id_actividad, nom_actividad, dsc_actividad, nom_categoria, nom_modalidad, nom_periodo,
-	      fecha_inicio, fecha_final
-      	FROM td_cal_inac_actividades_temporal
-    </querytext> 
-  </fullquery>
-  
-  <fullquery name="td_categorias::seleccionar_actividades.seleccionar_actividades"> 
-    <querytext> 
-	    SELECT id_actividad, nom_actividad, dsc_actividad, nom_categoria, nom_modalidad, nom_periodo,
-	      fecha_inicio, fecha_final
-      	FROM td_cal_inac_actividades_temporal
-    </querytext> 
-  </fullquery>
-    
- <fullquery name="td_categorias::insertar_actividades_temporales.insertar_actividades_temporales"> 
-    <querytext> 
-	    INSERT INTO td_cal_inac_actividades_temporal(id_actividad,
-            nom_actividad,dsc_actividad,nom_categoria, nom_modalidad, nom_periodo, fecha_inicio, 
-            fecha_final,id_calendario,calendario)
-        VALUES (:id_actividad,:nom_actividad, :dsc_actividad, :nom_categoria, :nom_modalidad, :nom_periodo, :fecha_inicio, 
-            :fecha_final,:id_calendario,:calendario);
-    </querytext> 
-  </fullquery>
- 
- <fullquery name="td_categorias::eliminar_actividad_temporal.eliminar_actividad_temporal"> 
-    <querytext> 
- 	    DELETE FROM td_cal_inac_actividades_temporal 
- 	    WHERE id_actividad = :id_actividad
-    </querytext> 
-  </fullquery>
-
-
- <fullquery name="td_categorias::insertar_actividades_temporales.validar_actividad_temporal"> 
-    <querytext> 
- 	    SELECT id_actividad 
- 	    FROM td_cal_inac_actividades_temporal 
-		WHERE (nom_actividad = :nom_actividad AND nom_categoria = :nom_categoria AND nom_modalidad = :nom_modalidad AND nom_periodo = :nom_periodo AND fecha_inicio = :fecha_inicio)
-    </querytext> 
-  </fullquery>
+  </fullquery> 
 
  <fullquery name="td_categorias::seleccionar_actividades_temporales.seleccionar_actividades_temporales"> 
     <querytext> 
@@ -311,62 +184,10 @@
     </querytext> 
   </fullquery>
 
-<fullquery name="td_categorias::submit_actividades.seleccionar_actividades_temporales_para_insertar"> 
-    <querytext> 
-        select td_cal_inac_actividades_temporal.nom_actividad,td_cal_inac_actividades_temporal.dsc_actividad,
-	 	    td_cal_inac_modalidades.id_modalidad, td_cal_inac_categorias.id_categoria, 
-	 	    dotlrn_terms.term_id as id_periodo, td_cal_inac_actividades_temporal.fecha_inicio,
-	 	    td_cal_inac_actividades_temporal.fecha_final,td_cal_inac_actividades_temporal.id_calendario 
-	    from td_cal_inac_actividades_temporal 
-	        inner join td_cal_inac_categorias
-	        on td_cal_inac_actividades_temporal.nom_categoria = td_cal_inac_categorias.nom_categoria
-	            inner join td_cal_inac_modalidades 
-	            on td_cal_inac_actividades_temporal.nom_modalidad = td_cal_inac_modalidades.nom_modalidad
-	                inner join dotlrn_terms 
-	                on td_cal_inac_actividades_temporal.nom_periodo = (dotlrn_terms.term_name || ' ' || dotlrn_terms.term_year)
-    </querytext> 
-  </fullquery>
-
-<fullquery name="td_categorias::submit_actividades.seleccionar_actividades_especiales_temporales_para_insertar"> 
-    <querytext> 
-        select  td_cal_inac_actividades_temporal.nom_actividad,td_cal_inac_actividades_temporal.dsc_actividad,
-            td_cal_inac_modalidades.id_modalidad, td_cal_inac_categorias.id_categoria,
-            td_cal_inac_actividades_temporal.fecha_inicio, td_cal_inac_actividades_temporal.fecha_final,
-            td_cal_inac_actividades_temporal.id_calendario 
-        from td_cal_inac_actividades_temporal 
-            inner join td_cal_inac_categorias
-            on td_cal_inac_actividades_temporal.nom_categoria = td_cal_inac_categorias.nom_categoria
-                inner join td_cal_inac_modalidades 
-                on td_cal_inac_actividades_temporal.nom_modalidad = td_cal_inac_modalidades.nom_modalidad
-        where td_cal_inac_modalidades.id_modalidad = 'O'
-   </querytext> 
-  </fullquery>
-
-  <fullquery name="td_categorias::submit_actividades.insertar_periodoxactividad"> 
-    <querytext> 
-	    INSERT INTO td_cal_inac_periodosxactividades(id_periodo, id_actividad)
-        VALUES (:id_periodo, :id_actividad);
-    </querytext>
-  </fullquery> 
-
-  <fullquery name="td_categorias::insertar_actividad.insertar_periodoxactividad"> 
-    <querytext> 
-	    INSERT INTO td_cal_inac_periodosxactividades(id_periodo, id_actividad)
-        VALUES (:id_periodo, :id_actividad);
-    </querytext>
-  </fullquery> 
-
-  <fullquery name="td_categorias::copiar_actividad.insertar_periodoxactividad"> 
-    <querytext> 
-	    INSERT INTO td_cal_inac_periodosxactividades(id_periodo, id_actividad)
-        VALUES (:id_periodo, :id_actividad);
-    </querytext>
-  </fullquery> 
-
  <fullquery name="td_categorias::obtener_id_calendario_de_profesores.obtener_id_calendario_de_profesores"> 
     <querytext> 
 	    SELECT calendar_id 
-	    from calendars 
+	    FROM calendars 
 	    WHERE calendar_name = 'Profesores';
     </querytext> 
   </fullquery>
@@ -374,20 +195,11 @@
  <fullquery name="td_categorias::obtener_id_calendario_de_estudiantes.obtener_id_calendario_de_estudiantes"> 
     <querytext> 
 	    SELECT calendar_id 
-	    from calendars 
+	    FROM calendars 
 	    WHERE calendar_name = 'Estudiantes';
     </querytext> 
   </fullquery>
-
- <fullquery name="td_categorias::submit_actividades.insertar_actividad"> 
-    <querytext> 
-	    insert into td_cal_inac_actividades (nom_actividad,dsc_actividad,id_categoria,
-	        fecha_inicio, fecha_final, id_calendario) 
-	    values (:nom_actividad,:dsc_actividad,:id_categoria,:fecha_inicio, :fecha_final,:id_calendario) 
-	    returning id_actividad;
-    </querytext> 
-  </fullquery>
-
+ 
  <fullquery name="td_categorias::insertar_actividad.insertar_actividad"> 
     <querytext> 
 	    INSERT INTO td_sch_cal_inac.actividad (nom_actividad,dsc_actividad,id_categoria) 
@@ -403,84 +215,12 @@
 		RETURNING id_term_actividad;
     </querytext> 
   </fullquery>
-  
- <fullquery name="td_categorias::copiar_actividad.insertar_actividad"> 
-    <querytext> 
-    	insert into td_cal_inac_actividades (nom_actividad,dsc_actividad,id_categoria,fecha_inicio,fecha_final,
-    	    id_calendario) 
-    	values (:nom_actividad,:dsc_actividad,:id_categoria,:fecha_inicio,:fecha_final,:id_calendario) 
-    	returning id_actividad;
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::insertar_actividad.insertar_actividad_publicada"> 
-    <querytext> 
-	    insert into td_cal_inac_actividades (nom_actividad,dsc_actividad,id_categoria,fecha_inicio,fecha_final,
-	        id_calendario,estado_publicacion) 
-	    values (:nom_actividad,:dsc_actividad,:id_categoria,:fecha_inicio, :fecha_final,:id_calendario, TRUE) 
-	    returning id_actividad;
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::insertar_actividad.insertar_cal_actividad"> 
+ 
+  <fullquery name="td_categorias::insertar_actividad.insertar_cal_actividad"> 
     <querytext> 
 	    INSERT INTO td_sch_cal_inac.cal_actividad (id_term_actividad, calendar_id, estado_publicacion, cal_item_id)
 	    VALUES (:id_term_actividad, :calendar_id, :estado_publicacion, :cal_item_id)
     </querytext>
-  </fullquery>
-
-
- <fullquery name="td_categorias::copiar_actividad.insertar_modalidadxactividad"> 
-    <querytext> 
-	    INSERT INTO td_cal_inac_modalidadesxactividad(id_actividad, id_modalidad) 
-	    VALUES (:id_actividad, :id_modalidad)
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::submit_actividades.insertar_modalidadxactividad"> 
-    <querytext> 
-	    INSERT INTO td_cal_inac_modalidadesxactividad(id_actividad, id_modalidad) 
-	    VALUES (:id_actividad, :id_modalidad)
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::insertar_actividad.insertar_termsxactividad"> 
-    <querytext> 
-	    insert into td_cal_inac_actividadesxterms(id_actividad, cal_item_id) 
-	    VALUES (:id_actividad, :cal_item_funcionario_id);
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::insertar_actividad.insertar_termsxactividad_bueno"> 
-    <querytext> 
-	    insert into td_cal_inac_actividadesxterms(id_actividad, cal_item_id) 
-	    VALUES (:id_actividad, :cal_item_profesor_id);
-	    insert into td_cal_inac_actividadesxterms(id_actividad, cal_item_id) 
-	    VALUES (:id_actividad, :cal_item_estudiante_id);
-	    insert into td_cal_inac_actividadesxterms(id_actividad, cal_item_id) 
-	    VALUES (:id_actividad, :cal_item_funcionario_id);
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::submit_actividades.insertar_termsxactividad"> 
-    <querytext> 
-	    insert into td_cal_inac_actividadesxterms(id_actividad, cal_item_id) 
-	    VALUES (:id_actividad, :cal_item_profesor_id);
-	    insert into td_cal_inac_actividadesxterms(id_actividad, cal_item_id) 
-	    VALUES (:id_actividad, :cal_item_estudiante_id);
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::submit_actividades.eliminar_actividades_temporales"> 
-    <querytext> 
-	    delete from td_cal_inac_actividades_temporal
-    </querytext> 
-  </fullquery>
-
- <fullquery name="td_categorias::eliminar_actividades_temporales.eliminar_actividades_temporales"> 
-    <querytext> 
-	    delete from td_cal_inac_actividades_temporal
-    </querytext> 
   </fullquery>
 
  <fullquery name="td_categorias::seleccionar_periodos_por_modalidad.seleccionar_periodos_por_modalidad"> 
@@ -497,16 +237,16 @@
  <fullquery name="td_categorias::seleccionar_periodo.seleccionar_periodo"> 
     <querytext> 
 	    SELECT term_name 
-	    from dotlrn_terms 
-        where term_id = :term_id
+	    FROM dotlrn_terms 
+        WHERE term_id = :term_id
     </querytext> 
   </fullquery>
 
  <fullquery name="td_categorias::obtener_estado_publicacion.obtener_estado_publicacion"> 
     <querytext> 
 	    SELECT estado_publicacion 
-	    from td_cal_inac_actividades 
-	    where id_actividad = :id_actividad
+	    FROM td_cal_inac_actividades 
+	    WHERE id_actividad = :id_actividad
     </querytext> 
   </fullquery>
   

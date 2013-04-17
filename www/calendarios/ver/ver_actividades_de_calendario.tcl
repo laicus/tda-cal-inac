@@ -1,7 +1,7 @@
 #tda-cal-inac/www/calendarios/ver/ver_actividades_de_calendario.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	{id_modalidad "%"}
@@ -244,8 +244,3 @@ template::list::create \
 	td_inac_procs::obtener_actividades_por_modalidad_categoria_periodo -id_modalidad "B" -id_categoria $id_categoria -periodo $periodo -id_calendario $id_calendario -multirow actividades_bimestre
 
 	td_inac_procs::obtener_actividades_por_modalidad_categoria_periodo -id_modalidad "M" -id_categoria $id_categoria -periodo $periodo -id_calendario $id_calendario -multirow actividades_mensual
-
-
-
-
-

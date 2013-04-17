@@ -1,7 +1,7 @@
 #tda-cal-inac/tcl/categoria-procs.tcl
 ad_library {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-19
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 }
 
@@ -15,8 +15,7 @@ namespace eval ::td_categorias {}
 ad_proc -public td_categorias::seleccionar_categoria {
     -id_categoria:required
 } {
-    Devuelve la información de la categoria
-    
+    Devuelve la información de la categoria    
     @param id_categoria Identificador de la categoria
     @return Devuelve el nombre y la descripción de la categoria. Blanco en caso de error.
 } {
@@ -43,8 +42,7 @@ ad_proc -public td_categorias::eliminar_categoria {
 	db_transaction {
 	    # Verifica que exista la categoria
 		if {[db_0or1row existe_actividad_con_categoria {}] != 1 }  {
-		    # Borra las modalidades asociadas a la categoria
-			#db_dml eliminar_categoria_modalidad {}
+		    
 			# Borra la categoria
 			db_dml eliminar_categoria {}
 			# Guarda el valor de 1
@@ -65,6 +63,8 @@ ad_proc -public td_categorias::eliminar_categoria {
 
 ad_proc -public td_categorias::seleccionar_categorias {
 } {
+	Seleccionar las categorias
+	@return lista de categorias ordenados por el nombre de la categoria
 } {
 	db_transaction { 
 		set lista [db_list_of_lists seleccionar_categorias {}]
@@ -77,8 +77,7 @@ ad_proc -public td_categorias::seleccionar_categorias {
 ad_proc -public td_categorias::seleccionar_categorias_para_grid {
 	-multirow
 } {
-    Selecciona las categorias disponibles en la base de datos
-    
+    Selecciona las categorias disponibles en la base de datos    
     @param multirow Lista donde se almacena la respuesta
     @return Devuelve 1 en caso de exito, y -1 en caso de error
 } {
@@ -95,6 +94,9 @@ ad_proc -public td_categorias::seleccionar_categorias_para_grid {
 ad_proc -public td_categorias::seleccionar_categorias_lista {
   {-term_id:required}
 } {
+	Seleccionar categorias a partir de un periodo
+	@param term_id identificador de periodo
+	@return lista de categorias
 } {
 	db_transaction {
 		set lista [db_list_of_lists seleccionar_categorias_lista {}]
@@ -109,12 +111,10 @@ ad_proc -public td_categorias::insertar_categoria {
     {-dsc_categoria:required}
     
 } {
-    Función encargada de agregar de insertar las categorias
-    
+    Función encargada de agregar de insertar las categorias    
     @param nom_categoria Nombre de la categoria
-    @param dsc_categoria Descripción de la categoria
-    @param lst_modalidades Lista de modalidades
-    @return Devuelve 1 en caso exitos, -1 y -2 en caso de error
+    @param dsc_categoria Descripción de la categoria    
+    @return salida Devuelve 1 en caso exitos, -1 y -2 en caso de error
 } {
     # Bloque de transaccion de base de datos
     set salida ""
@@ -124,14 +124,7 @@ ad_proc -public td_categorias::insertar_categoria {
 		# Si no existe la categoria
 		if { $id_categoria == "" } {
 		    # Guarda la categoria y almacena el identificador
-			set id_categoria [db_string insertar_categoria {}]
-			# REVISAR, PROBLEMA DE LISTA DENTRO DE LISTA
-			#set lst_modalidades [lindex $lst_modalidades 0]
-			# Por cada modalidad
-			#foreach id_modalidad $lst_modalidades {
-			    # Guarde la categoria y la modalidad
-				#db_dml insertar_categoria_modalidad {}
-			#}
+			set id_categoria [db_string insertar_categoria {}]			
 			# Termina con exito
 			set salida 1;
 		} else {
@@ -160,12 +153,7 @@ ad_proc -public td_categorias::modificar_categoria {
     #Abre el bloque de transacciones
 	db_transaction {
 	    #Realiza la actualizacion
-		db_dml modificar_categoria {}
-		#elimina publicacion del calendar y elimina los datos de cal_actividad
-		
-		#ingresa la nueva publicacion e ingresa los datos en cal_actividad
-		
-		
+		db_dml modificar_categoria {}		
 		#Almacena el valor de salida
 		set salida 1;
 	} on_error {
@@ -178,6 +166,8 @@ ad_proc -public td_categorias::modificar_categoria {
 
 ad_proc -public td_categorias::seleccionar_modalidades {
 } {
+	Seleccionar modalidades
+	@return lista de modalidades
 } {
 	db_transaction {
 		set lista [db_list_of_lists seleccionar_modalidades {}]		
@@ -190,8 +180,7 @@ ad_proc -public td_categorias::seleccionar_modalidades {
 ad_proc -public td_categorias::seleccionar_modalidades_por_categoria {
     {-id_categoria:required}
 } {
-    Devuelve la lista de modalidades para una categoria
-    
+    Devuelve la lista de modalidades para una categoria    
     @param id_categoria Identificador de la categoria
     @return Devuelve la lista con las categorias
 } {
@@ -202,6 +191,8 @@ ad_proc -public td_categorias::seleccionar_actividades_temporales  {
 	-multirow
 	-sql_query	
 } {
+	Devuelve las actividades por las condición de la consulta sql_query
+	@param sql_query consulta sql para las condiciones del retorno
 } {
 	
 	db_transaction {
@@ -216,6 +207,7 @@ ad_proc -public td_categorias::seleccionar_actividades_temporales  {
 ad_proc -public td_categorias::seleccionar_actividades  {
 	-multirow
 } {
+	Seleccionar todas las actiidades
 	@multirow estructura donde almacena las actividades
 } {
 	db_transaction {	
@@ -224,20 +216,6 @@ ad_proc -public td_categorias::seleccionar_actividades  {
 		return -1
 	}
 }
-
-
-
-ad_proc -public td_categorias::seleccionar_actividades  {
-	-multirow
-} {
-} {
-	db_transaction {	
-		return [db_multirow $multirow seleccionar_actividades_temporales {}]
-	} on_error {
-		return -1
-	}
-}
-
 
 ad_proc -public td_categorias::insertar_actividades_temporales  {
 	-nom_actividad
@@ -255,6 +233,7 @@ ad_proc -public td_categorias::insertar_actividades_temporales  {
 	-comunidades
 	-estado_publicacion
 } {
+	Insertar las actividades
 } {
 	db_transaction {
 		set repetidas [db_list_of_lists validar_actividad_con_no_temporales {}]
@@ -266,8 +245,8 @@ ad_proc -public td_categorias::insertar_actividades_temporales  {
 		} else {
 			
 			set id_actividad [td_categorias::insertar_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -comunidades $comunidades -estado_publicacion $estado_publicacion]
-			if { $id_actividad > 0 } {				
-				#db_dml insertar_actividades_temporales {}
+			
+			if { $id_actividad > 0 } {								
 				set retorno 1
 			} else {
 				set retorno -5				
@@ -283,6 +262,7 @@ ad_proc -public td_categorias::seleccionar_periodos_por_modalidad {
 	{-id_modalidad}
 	{-term_year}
 } {
+	Seleccionar las actividades por modalidades
 } {
 	db_transaction {
 		set lista [db_list_of_lists seleccionar_periodos_por_modalidad {}]
@@ -292,97 +272,11 @@ ad_proc -public td_categorias::seleccionar_periodos_por_modalidad {
 	return $lista
 }
 
-ad_proc -public td_categorias::eliminar_actividad_temporal {
-	{-id_actividad}
-} {
-} {
-	db_transaction {
-		db_dml eliminar_actividad_temporal {}
-		set retorno 1
-	} on_error { 
-		set retorno -1
-	}
-	return $retorno
-}
-
-ad_proc -public td_categorias::validar_actividades {
-	-actividades
-} {
-} {
-	foreach actividad $actividades {
-		set nom_actividad [lindex $actividad 0]
-		set dsc_actividad [lindex $actividad 1]
-		set id_modalidad [lindex $actividad 2]
-		set id_categoria [lindex $actividad 3]
-		set id_periodo [lindex $actividad 4]
-		set fecha_inicio [lindex $actividad 5]
-		set fecha_final [lindex $actividad 6]
-		set repetidas [db_list_of_lists validar_actividad_con_no_temporales {}]
-		if {[llength $repetidas] != 0 } {
-			return -1
-		} else { 
-			set repetidas [db_list_of_lists validar_actividad_con_no_temporales_especial {}]
-			if {[llength $repetidas] != 0 } {
-				return -1
-			}
-		}
-	}
-	return 1
-}
-
-ad_proc -public td_categorias::submit_actividades {
-} {
-} {
-	db_transaction {	
-		set actividades [db_list_of_lists seleccionar_actividades_temporales_para_insertar {}]
-		set entro 0
-		set err [td_categorias::validar_actividades -actividades $actividades]
-		if {$err == 1} {
-			foreach actividad $actividades {
-				set nom_actividad [lindex $actividad 0]
-				set dsc_actividad [lindex $actividad 1]
-				set id_modalidad [lindex $actividad 2]
-				set id_categoria [lindex $actividad 3]
-				set id_periodo [lindex $actividad 4]
-				set fecha_inicio [lindex $actividad 5]
-				set fecha_final [lindex $actividad 6]
-				set id_calendario [lindex $actividad 7]
-				set id_actividad [ db_string insertar_actividad {} ]
-				db_dml insertar_modalidadxactividad {}
-				db_dml insertar_periodoxactividad {}
-			}
-			set actividades [db_list_of_lists seleccionar_actividades_especiales_temporales_para_insertar {}]
-			foreach actividad $actividades {
-				set nom_actividad [lindex $actividad 0]
-				set dsc_actividad [lindex $actividad 1]
-				set id_modalidad [lindex $actividad 2]
-				set id_categoria [lindex $actividad 3]
-				set fecha_inicio [lindex $actividad 4]
-				set fecha_final [lindex $actividad 5]
-				set id_calendario [lindex $actividad 6]
-				set id_actividad [ db_string insertar_actividad {} ]
-				db_dml insertar_modalidadxactividad {}
-			}
-			db_dml eliminar_actividades_temporales {} 
-			set salida 1
-		} else {
-			set salida -1				
-		}
-	} on_error {
-		set salida -2
-	}
-	return $salida
-}
-
-ad_proc -public td_categorias::eliminar_actividades_temporales {	
-} {
-} {
-	db_dml eliminar_actividades_temporales {} 
-}
-
 ad_proc -public td_categorias::seleccionar_periodo {
 	-term_id
 } {
+	Devuelve los datos de un periodo
+	@param term_id identificador de periodo
 } {
 	db_transaction {
 		set periodo [db_string seleccionar_periodo {}]
@@ -395,6 +289,7 @@ ad_proc -public td_categorias::seleccionar_periodo {
 ad_proc -public td_categorias::obtener_estado_publicacion {
 	-id_actividad
 } {
+	Devuelve estado de publicacion
 } {
 	db_transaction {
 		set retorno [db_string obtener_estado_publicacion {}]
@@ -415,11 +310,10 @@ ad_proc -public td_categorias::modificar_actividad {
 	-comunidades
 	-estado_publicacion
 } {
-	
+	Modificar los datos de una actividad
 } {	
 	db_transaction {
-		puts "entro a modificar actividad  $id_actividad $nom_actividad -dsc_actividad $dsc_actividad -id_categoria $id_categoria -id_periodo $term_id -fecha_inicio $fecha_inicio -fecha_final $fecha_final -comunidades $comunidades -estado_publicacion $estado_publicacion"
-			
+					
 		#modificar los valores de la actividad
 		db_dml modificar_actividad {}
 		
@@ -430,9 +324,7 @@ ad_proc -public td_categorias::modificar_actividad {
 		set lista_cal_item_ids [td_inac_procs::obtener_id_cal_item_por_actividad -id_actividad $id_actividad]
 		set publicaciones [td_inac_procs::seleccionar_actividad_publicacion -id_actividad $id_actividad]
 		set estado_original [lindex $publicaciones 0 2]
-		
-		puts "publicaciones aqui $lista_cal_item_ids  estado original $estado_original y nuevo estado es $estado_publicacion"
-		
+				
 		db_dml eliminar_cal_actividad {}
 		
 		#recorrer las cal_item_id de las comunidades de los calendarios para ser eliminados
@@ -442,7 +334,7 @@ ad_proc -public td_categorias::modificar_actividad {
 					calendar::item::get -cal_item_id $cal_item_id -array cal_item
 					calendar::item::delete -cal_item_id $cal_item_id
 					calendar::item::delete_recurrence -recurrence_id $cal_item(recurrence_id)
-					puts "cal_item_id es $cal_item_id"
+					
 				}	
 			}
 		}
@@ -487,7 +379,6 @@ ad_proc -public td_categorias::modificar_actividad {
 						-recur_until [calendar::to_sql_datetime -date $recur_until -time "" -time_p 0]
 				}
 				#insertar en cal_actividad
-				#id_term_activad, calendar_id, estado_publicacion, cal_item_id	
 				db_dml insertar_cal_actividad {}			
 			}
 		} else { 
@@ -520,9 +411,10 @@ ad_proc -public td_categorias::insertar_actividad {
 	-comunidades
 	-estado_publicacion
 } {
+	Insertar actividad y publicar actividad
 } {
 	db_transaction {
-		puts "===================............. INICIO PROCESO DE INSERCION...."	
+		
 		if { $estado_publicacion } {
 		
 			set s $nom_actividad
@@ -540,14 +432,13 @@ ad_proc -public td_categorias::insertar_actividad {
 			set start_date [calendar::to_sql_datetime -date $date -time $start_time -time_p $time_p]
 			set end_date [calendar::to_sql_datetime -date $date -time $end_time -time_p $time_p]
 			
-			# Insertar actividad
-            puts "===========........ Se va a insertar la actividad..."
+			# Insertar actividad            
 			set id_actividad [ db_string insertar_actividad {} ]
             
             
             # Insertar fechas y periodo de actividad
-			set id_term_activad [db_string insertar_actividad_term {}]
-			
+			set id_term_actividad [db_string insertar_actividad_term {}]
+
 			#Insertar actividad en el calendario del calendars
 			foreach calendar_id $comunidades {
 				
@@ -579,11 +470,10 @@ ad_proc -public td_categorias::insertar_actividad {
 			# AUN NO SE VA A PUBLICAR
 			# ============================
 			# Insertar actividad
-            puts "===========........ Se va a insertar la actividad..."
+         
 			set id_actividad [ db_string insertar_actividad {} ]
-            #puts "===========........ Se inserto la actividad... RESULTADO $id_actividad"
-            # Insertar fechas y periodo de actividad
-			
+            
+            # Insertar fechas y periodo de actividad			
 			set id_term_actividad [db_string insertar_actividad_term {}]
 			
 			#Insertar insertar_cal_actividad
@@ -599,29 +489,4 @@ ad_proc -public td_categorias::insertar_actividad {
 		set retorno -1
 	}
 	return $retorno
-}
-
-ad_proc -public td_categorias::copiar_actividad {
-	-nom_actividad
-	-dsc_actividad
-	-id_categoria
-	-id_modalidad
-	-id_periodo
-	-fecha_inicio
-	-fecha_final
-	-id_calendario
-	-estado_publicacion
-} {
-} {
-	db_transaction {
-		set id_actividad [ db_string insertar_actividad {} ]
-		db_dml insertar_modalidadxactividad {}
-		if {$id_modalidad != "O"} {
-			db_dml insertar_periodoxactividad {}
-		}
-		set retorno 1
-	} on_error { 
-		set retorno -1
-	}
-	return retorno	
 }

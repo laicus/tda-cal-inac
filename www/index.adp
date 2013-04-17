@@ -51,9 +51,10 @@
 		 <!--menu-->
 			<ul id="menu" valign = "top">
 			  <li><a onclick="cargarURL('informacionGeneral', 'recuadro_centro');">Información general</a></li>
+			  <li><a onclick="cargarURL('actividades/ver/pagina', 'recuadro_centro');">Actividades</a></li>
 			  <li><a onclick="cargarURL('categorias/ver/pagina', 'recuadro_centro');">Categorías</a></li>
 			  <li><a onclick="cargarURL('calendarios/ver/pagina', 'recuadro_centro');">Calendarios</a></li>			  
-			  <li><a onclick="cargarURL('actividades/ver/pagina', 'recuadro_centro');">Actividades</a></li>
+			  
 			</ul>
 	      </td>
 		  <td valign = "top">

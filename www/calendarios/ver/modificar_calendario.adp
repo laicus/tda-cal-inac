@@ -19,5 +19,3 @@
 <div id = "modificar_actividades" >
 </div>
 </div>
-
-

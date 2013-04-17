@@ -1,17 +1,14 @@
-set user [auth::require_login]
+#tda-cal-inac/www/index.tcl
 ad_page_contract {
-    
-    @author Jose Alberto Garita (vsolisrojas@gmail.com)
-    @creation-date 2008-08-21
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
-} -validate {
-} -errors {
 }
-
 
 set title "Calendario institucional y academico"
 
+set user [auth::require_login]
 
 #Estilo Jquery UI
 #template::head::add_css -href "/resources/tda-cal-inac/css/ui-lightness/jquery-ui-1.10.0.custom.css" -order 1

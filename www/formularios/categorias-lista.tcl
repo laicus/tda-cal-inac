@@ -1,7 +1,7 @@
 #tda-cal-inac/www/formularios/categorias-lista.tcl
 ad_page_contract {    
     Lista de Planes para carga dinamica en la seleccion
-    @author Marco Loaiza (mloaiza@gmail.com)
+    @author Ederick Navas (enavas@itcr.ac.cr)
     @creation-date 24-10-2008
     @cvs-id $Id$
 } {

@@ -9,7 +9,7 @@ ad_page_contract {
 	fecha_publicacion:notnull
 }
 
-set res [ td_calendarios::modificar_calendario -anio $anio -id_calendario $id_calendario -fecha_publicacion $fecha_publicacion ] 
+set res [td_calendarios::modificar_calendario -anio $anio -id_calendario $id_calendario -fecha_publicacion $fecha_publicacion ] 
 ns_write $res
 
 

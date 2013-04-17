@@ -1,159 +1,167 @@
--- Table: td_cal_inac_calendarios
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
 
--- DROP TABLE td_cal_inac_calendarios;
+CREATE SCHEMA td_sch_cal_inac;
 
-CREATE TABLE td_cal_inac_calendarios
-(
-  id_calendario serial NOT NULL,
-  num_ano integer,
-  fecha_publicacion date,
-  ultima_actualizacion timestamp without time zone,
-  CONSTRAINT id_calendario_pk PRIMARY KEY (id_calendario)
-)
-WITH (OIDS=TRUE);
+ALTER SCHEMA td_sch_cal_inac OWNER TO "www-data";
 
--- Table: td_cal_inac_categorias
+SET search_path = td_sch_cal_inac, pg_catalog;
 
--- DROP TABLE td_cal_inac_categorias;
+SET default_tablespace = '';
 
-CREATE TABLE td_cal_inac_categorias
-(
-  id_categoria serial NOT NULL,
-  nom_categoria character varying(200) NOT NULL,
-  dsc_categoria character varying(200),
-  especial bit(1),
-  CONSTRAINT td_cal_inac_pk PRIMARY KEY (id_categoria)
-)
-WITH (OIDS=TRUE);
+SET default_with_oids = true;
 
--- Table: td_cal_inac_actividades
+CREATE TABLE actividad (
+    id_actividad integer NOT NULL,
+    nom_actividad character varying(500) NOT NULL,
+    id_categoria integer,
+    dsc_actividad text
+);
 
--- DROP TABLE td_cal_inac_actividades;
+ALTER TABLE td_sch_cal_inac.actividad OWNER TO "www-data";
 
-CREATE TABLE td_cal_inac_actividades
-(
-  id_actividad serial NOT NULL,
-  nom_actividad character varying(500) NOT NULL,
-  id_categoria integer,
-  fecha_inicio date,
-  fecha_final date,
-  dsc_actividad character varying(500),
-  id_calendario integer,
-  estado_publicacion boolean DEFAULT false,
-  CONSTRAINT td_cal_inac_actividades_pkey PRIMARY KEY (id_actividad),
-  CONSTRAINT td_cal_inac_actividades_id_calendario_fk FOREIGN KEY (id_calendario)
-      REFERENCES td_cal_inac_calendarios (id_calendario) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT td_cal_inac_actividades_id_categoria_fkey FOREIGN KEY (id_categoria)
-      REFERENCES td_cal_inac_categorias (id_categoria) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (OIDS=TRUE);
+CREATE SEQUENCE actividad_id_actividad_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
-CREATE TABLE td_cal_inac_actividades_temporal
-(
-  id_actividad integer NOT NULL,
-  nom_actividad character varying(500) NOT NULL,
-  nom_categoria character varying(100) NOT NULL,
-  nom_modalidad character varying(100) NOT NULL,
-  nom_periodo character varying(100) NOT NULL,
-  fecha_inicio character varying(100) NOT NULL,
-  fecha_final character varying(100) NOT NULL,
-  dsc_actividad character varying(500),
-  id_calendario integer,
-  calendario integer,
-  CONSTRAINT td_cal_inac_actividades_temporal_pkey PRIMARY KEY (id_actividad)
-)
-WITH (OIDS=TRUE);
+ALTER TABLE td_sch_cal_inac.actividad_id_actividad_seq OWNER TO "www-data";
 
-ALTER TABLE td_admision_periodo ADD CONSTRAINT td_cal_inac_periodos_id_calendario_fk FOREIGN KEY (id_calendario)
-      REFERENCES td_cal_inac_calendarios (id_calendario) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE;
+ALTER SEQUENCE actividad_id_actividad_seq OWNED BY actividad.id_actividad;
 
--- Table: td_cal_inac_modalidades
+SELECT pg_catalog.setval('actividad_id_actividad_seq', 15, true);
 
--- DROP TABLE td_cal_inac_modalidades;
+CREATE TABLE actividad_term (
+    id_term_actividad integer NOT NULL,
+    id_actividad integer NOT NULL,
+    term_id integer NOT NULL,
+    fecha_inicio date,
+    fecha_fin date    
+);
 
-CREATE TABLE td_cal_inac_modalidades
-(
-  id_modalidad character varying(1) NOT NULL,
-  nom_modalidad character varying(100) NOT NULL,
-  can_periodos smallint,
-  es_especial bit(1),
-  CONSTRAINT td_cal_inac_modalidades2_pkey PRIMARY KEY (id_modalidad),
-  CONSTRAINT td_cal_inac_modalidades2_nom_modalidad_key UNIQUE (nom_modalidad),
-  CONSTRAINT td_cal_inac_modalidades2_can_periodos_check CHECK (can_periodos > 0)
-)
-WITH (OIDS=TRUE);
+ALTER TABLE td_sch_cal_inac.actividad_term OWNER TO "www-data";
 
--- Table: td_cal_inac_modalidadesxcategorias
+CREATE SEQUENCE actividad_term_id_term_actividad_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
--- DROP TABLE td_cal_inac_modalidadesxcategorias;
+ALTER TABLE td_sch_cal_inac.actividad_term_id_term_actividad_seq OWNER TO "www-data";
 
-CREATE TABLE td_cal_inac_modalidadesxcategorias
-(
-  id_categoria integer NOT NULL,
-  id_modalidad character varying(1) NOT NULL,
-  CONSTRAINT td_cal_inac_modalidadesxcategorias_pkey1 PRIMARY KEY (id_categoria, id_modalidad),
-  CONSTRAINT td_cal_inac_modalidadesxcategoria_id_categoria1_fkey FOREIGN KEY (id_categoria)
-      REFERENCES td_cal_inac_categorias (id_categoria) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT td_cal_inac_modalidadesxcategorias_id_modalidad1_fkey FOREIGN KEY (id_modalidad)
-      REFERENCES td_cal_inac_modalidades (id_modalidad) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (OIDS=TRUE);
+ALTER SEQUENCE actividad_term_id_term_actividad_seq OWNED BY actividad_term.id_term_actividad;
 
--- Table: td_cal_inac_periodosxactividades
+SELECT pg_catalog.setval('actividad_term_id_term_actividad_seq', 14, true);
 
--- DROP TABLE td_cal_inac_periodosxactividades;
+SET default_with_oids = false;
 
-CREATE TABLE td_cal_inac_periodosxactividades
-(
-  id_periodo integer NOT NULL,
-  id_actividad integer NOT NULL,
-  CONSTRAINT td_cal_inac_periodosxporactividades_pk PRIMARY KEY (id_periodo, id_actividad),
-  CONSTRAINT td_admision_periodo_fk FOREIGN KEY (id_periodo)
-      REFERENCES td_admision_periodo (id_term) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT td_cal_inac_actividades_id_actividad_fk FOREIGN KEY (id_actividad)
-      REFERENCES td_cal_inac_actividades (id_actividad) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE
-)
-WITH (OIDS=FALSE);
+CREATE TABLE cal_actividad (
+    id_cal_actividad integer NOT NULL,
+    id_term_actividad integer NOT NULL,
+    calendar_id integer NOT NULL,
+    estado_publicacion boolean NOT NULL,
+    cal_item_id integer
+);
 
--- Table: td_cal_inac_actividadesxterms
+ALTER TABLE td_sch_cal_inac.cal_actividad OWNER TO "www-data";
 
--- DROP TABLE td_cal_inac_actividadesxterms;
+CREATE SEQUENCE cal_actividad_id_cal_actividad_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
 
-CREATE TABLE td_cal_inac_actividadesxterms
-(
-  id_actividad integer NOT NULL,
-  cal_item_id integer NOT NULL,
-  CONSTRAINT td_cal_inac_actividadesxterms_pkey PRIMARY KEY (id_actividad, cal_item_id),
-  CONSTRAINT cal_item_fk FOREIGN KEY (cal_item_id)
-      REFERENCES cal_items (cal_item_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT td_cal_inac_actividadesterms_id_actividad_fkey FOREIGN KEY (id_actividad)
-      REFERENCES td_cal_inac_actividades (id_actividad) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE
-)
-WITH (OIDS=TRUE);
+ALTER TABLE td_sch_cal_inac.cal_actividad_id_cal_actividad_seq OWNER TO "www-data";
 
--- Table: td_cal_inac_modalidadesxactividad
+ALTER SEQUENCE cal_actividad_id_cal_actividad_seq OWNED BY cal_actividad.id_cal_actividad;
 
--- DROP TABLE td_cal_inac_modalidadesxactividad;
+SELECT pg_catalog.setval('cal_actividad_id_cal_actividad_seq', 41, true);
 
-CREATE TABLE td_cal_inac_modalidadesxactividad
-(
-  id_actividad integer NOT NULL,
-  id_modalidad character varying(1) NOT NULL,
-  CONSTRAINT td_cal_inac_modalidadesxactividad_pkey PRIMARY KEY (id_actividad, id_modalidad),
-  CONSTRAINT td_cal_inac_actividades_id_actividad_fk FOREIGN KEY (id_actividad)
-      REFERENCES td_cal_inac_actividades (id_actividad) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE CASCADE,
-  CONSTRAINT td_cal_inac_modalidadesxactividad_id_modalidad_fkey FOREIGN KEY (id_modalidad)
-      REFERENCES td_cal_inac_modalidades (id_modalidad) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (OIDS=TRUE);
+SET default_with_oids = true;
+
+CREATE TABLE categoria (
+    id_categoria integer NOT NULL,
+    nom_categoria text NOT NULL,
+    dsc_categoria text
+);
+
+ALTER TABLE td_sch_cal_inac.categoria OWNER TO "www-data";
+
+CREATE SEQUENCE categoria_id_categoria_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+ALTER TABLE td_sch_cal_inac.categoria_id_categoria_seq OWNER TO "www-data";
+
+ALTER SEQUENCE categoria_id_categoria_seq OWNED BY categoria.id_categoria;
+
+SELECT pg_catalog.setval('categoria_id_categoria_seq', 37, true);
+
+CREATE TABLE modalidad (
+    id_modalidad character varying(1) NOT NULL,
+    nom_modalidad character varying(100) NOT NULL
+);
+
+ALTER TABLE td_sch_cal_inac.modalidad OWNER TO "www-data";
+
+ALTER TABLE ONLY actividad ALTER COLUMN id_actividad SET DEFAULT nextval('actividad_id_actividad_seq'::regclass);
+
+ALTER TABLE ONLY actividad_term ALTER COLUMN id_term_actividad SET DEFAULT nextval('actividad_term_id_term_actividad_seq'::regclass);
+
+ALTER TABLE ONLY cal_actividad ALTER COLUMN id_cal_actividad SET DEFAULT nextval('cal_actividad_id_cal_actividad_seq'::regclass);
+
+ALTER TABLE ONLY categoria ALTER COLUMN id_categoria SET DEFAULT nextval('categoria_id_categoria_seq'::regclass);
+
+ALTER TABLE ONLY actividad
+    ADD CONSTRAINT actividad_pk PRIMARY KEY (id_actividad);
+
+ALTER TABLE ONLY categoria
+    ADD CONSTRAINT categoria_pk PRIMARY KEY (id_categoria);
+
+ALTER TABLE ONLY modalidad
+    ADD CONSTRAINT modalidad_pk PRIMARY KEY (id_modalidad);
+
+ALTER TABLE ONLY cal_actividad
+    ADD CONSTRAINT pk_id_cal_actividad PRIMARY KEY (id_cal_actividad);
+
+ALTER TABLE ONLY actividad_term
+    ADD CONSTRAINT pk_id_term_actividad PRIMARY KEY (id_term_actividad);
+
+ALTER TABLE ONLY actividad
+    ADD CONSTRAINT actividad_categoria_fk FOREIGN KEY (id_categoria) REFERENCES categoria(id_categoria);
+
+ALTER TABLE ONLY cal_actividad
+    ADD CONSTRAINT cal_item_id_fk FOREIGN KEY (cal_item_id) REFERENCES public.cal_items(cal_item_id);
+
+ALTER TABLE ONLY actividad_term
+    ADD CONSTRAINT fk_actividad_dotlrn_term FOREIGN KEY (id_actividad) REFERENCES actividad(id_actividad) ON DELETE CASCADE;
+
+ALTER TABLE ONLY cal_actividad
+    ADD CONSTRAINT fk_calendar_id FOREIGN KEY (calendar_id) REFERENCES public.calendars(calendar_id);
+
+ALTER TABLE ONLY actividad_term
+    ADD CONSTRAINT fk_dotlrn_term_actividad FOREIGN KEY (term_id) REFERENCES public.dotlrn_terms(term_id) ON DELETE CASCADE;
+
+ALTER TABLE ONLY cal_actividad
+    ADD CONSTRAINT fk_id_term_actividad FOREIGN KEY (id_term_actividad) REFERENCES actividad_term(id_term_actividad);
+
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('B', 'BIMESTRE');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('C', 'CUATRIMESTRE');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('M', 'MENSUAL');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('S', 'SEMESTRE');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('T', 'TRIMESTRE');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('A', 'ANUAL');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('H', 'HUMANISTICA');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('I', 'INTENSIVO');
+INSERT INTO modalidad (id_modalidad, nom_modalidad) VALUES ('V', 'VERANO');

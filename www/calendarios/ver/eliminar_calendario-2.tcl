@@ -1,9 +1,8 @@
 #tda-cal-inac/www/calendarios/ver/eliminar_calendario-2.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
-
 } {
 	id_calendario:notnull
 }

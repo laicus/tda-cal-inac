@@ -1,4 +1,3 @@
-
 <div id = "info" valign="top">
 	<div class="textoIntro">
 		<hr>

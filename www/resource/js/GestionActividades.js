@@ -256,7 +256,6 @@ function InsertarActividad(){
 	var nom_actividad = document.getElementById("txt_nombre_actividad").value;
 	var nom_modalidad = document.getElementById("cmb_modalidades").options[document.getElementById("cmb_modalidades").selectedIndex].innerHTML;
 	var nom_periodo = document.getElementById("cmb_periodos").value;
-
 	var id_calendario = document.getElementById("cmb_calendarios").value;
 	var id_modalidad = document.getElementById("cmb_modalidades").value;
 	var comunidades = "";
@@ -296,7 +295,6 @@ function InsertarActividad(){
 	} 
 	if ($("input[name=chk_comunidad3]").is(':checked'))
 	{
-		
 		comunidades = comunidades + $("input[name=chk_comunidad3]").val() + " ";
 				
 	}
@@ -332,8 +330,9 @@ function respuesta_insertar_actividad_temporal()
      if ((gConexionActividades.readyState == 4) && (gConexionActividades.status == 200)){
       
 		var respuesta = gConexionActividades.responseText;
+		alert(respuesta);
 		volver_ver_actividades();
-	   	document.getElementById("grid_actividades").innerHTML = respuesta;
+	   	//document.getElementById("grid_actividades").innerHTML = respuesta;
 		document.getElementById("resultado").innerHTML = document.getElementById("mensaje").value;
 		var msj = document.getElementById("mensaje").value;
 		alert(msj);

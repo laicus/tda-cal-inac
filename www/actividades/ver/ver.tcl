@@ -1,7 +1,7 @@
 #tda-cal-inac/www/actividades/ver/ver.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	{id_modalidad "%"}
@@ -16,13 +16,10 @@ ad_form -name accion -has_submit 1 -form {
     {hiden_accion:integer(hidden) {value $accion} {html {id "hiden_accion"} } }
 }
 
-#set especial 1
 set lista_calendarios [concat { {"TODOS" "0"} } [td_calendarios::seleccionar_calendarios] ]
 set list_modalidades [concat { {"TODOS" "%"} } [td_inac_procs::seleccionar_modalidades] ]
 
-if { $especial == 0 } {
-
-} else {
+if { $especial != 0 } {
 	set list_categorias [concat { {"TODOS" "%"} } [td_categorias::seleccionar_categorias]]
 	set list_periodos [concat { {"TODOS" "%"} } [td_categorias::seleccionar_periodos_por_modalidad -id_modalidad $id_modalidad -term_year $id_calendario ]]
 }

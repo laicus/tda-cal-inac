@@ -1,7 +1,7 @@
 #tda-cal-inac/www/calendarios/ver/modificar_calendario.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	id_calendario:notnull
@@ -25,7 +25,10 @@ ad_form  -name formulario -mode edit -has_submit 1 -form {
 }
 
 ad_form -name calendario -has_submit 1 -form {
-    {calendario:integer(hidden) {value $id_calendario} {html {id "id_calendario"} } }
+    {calendario:integer(hidden) 
+        {value $id_calendario} 
+        {html {id "id_calendario"} } 
+    }
 }
 
 

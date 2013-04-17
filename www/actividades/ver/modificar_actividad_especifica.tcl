@@ -1,7 +1,7 @@
 #tda-cal-inac/www/actividades/ver/modificar_actividad_especifica.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	id_actividad:notnull
@@ -12,10 +12,8 @@ ad_page_contract {
 	fecha_inicio:notnull
 	fecha_final:notnull
 	comunidades:notnull
-	estado_publicacion:notnull	
-	
+	estado_publicacion:notnull
 }
 
 set res [td_categorias::modificar_actividad -id_actividad $id_actividad -nom_actividad $nom_actividad -dsc_actividad $dsc_actividad -term_id $term_id -id_categoria $id_categoria -fecha_inicio $fecha_inicio -fecha_final  $fecha_final -comunidades $comunidades -estado_publicacion $estado_publicacion]
-
 ns_write $res

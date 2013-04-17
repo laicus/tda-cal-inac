@@ -1,5 +1,3 @@
-
-
 <div id="viewadp-cal-table" class="margin-form margin-form-div">
 	<div class="form-item-wrapper">
 		<formtemplate id = "frm_cmb_calendarios"></formtemplate>

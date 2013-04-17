@@ -1,15 +1,17 @@
 #tda-cal-inac/www/calendarios/ver/eliminar_calendario.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
-
 } {
 	id_calendario:notnull
 } 
 
 ad_form -name calendario -has_submit 1 -form {
-    {calendario:integer(hidden) {value $id_calendario} {html {id "id_calendario"} } }
+    {calendario:integer(hidden) 
+        {value $id_calendario} 
+        {html {id "id_calendario"} } 
+    }
 }
 
 set columnas {
@@ -25,7 +27,6 @@ set columnas {
   	end_date {
 	  label "Termina (año-mes-día)"
 	}
-
 }
 
 template::list::create \
@@ -34,7 +35,7 @@ template::list::create \
     -key term_id \
     -elements $columnas \
     -no_data "No existen periodos en este calendario" \
-     -html { style "width:100%" }
+    -html { style "width:100%" }
 
 td_inac_procs::seleccionar_periodos_por_calendario_para_grid -multirow periodos -id_calendario $id_calendario
 
@@ -51,11 +52,9 @@ set columnas {
 	fecha_final {
 	  label "Termina (año-mes-día)"
 	}
-
 	estado_publicacion {
 	  label "Publicada"
 	}
-
 }
 
 template::list::create \
@@ -64,7 +63,7 @@ template::list::create \
     -key id_actividad \
     -elements $columnas \
     -no_data "No existen actividades en este calendario." \
-     -html { style "width:100%" }
+    -html { style "width:100%" }
 
 td_inac_procs::seleccionar_actividades_por_calendario -multirow actividades -id_calendario $id_calendario
 

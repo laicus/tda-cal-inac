@@ -1,8 +1,7 @@
 #tda-cal-inac/www/actividades/insertar/encabezado.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
     @author Ederick Navas (enavas@itcr.ac.cr)
-    @creation-date 2009-01-13
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	id_modalidad:optional
@@ -133,8 +132,3 @@ ad_form  -name formularioEncabezado -mode edit -has_submit 1 -form {
 	    {after_html {<input type='reset' value=' ... ' onclick=\"return showCalendar('fecha_final', 'yyyy-mm-dd');\"> \[<b>aaaa-mm-dd </b>\]}}
 	}
 }
-
-#set var [element get_value frm_seccion_publicacion chk_publicacion]
-#set check [element get_value frm_seccion_comunidades chk_comunidades]
-
-

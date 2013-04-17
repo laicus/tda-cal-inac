@@ -1,7 +1,7 @@
 #tda-cal-inac/www/actividades/insertar/grid_actividades.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	nom_actividad:optional
@@ -23,35 +23,28 @@ ad_page_contract {
 }
 set msn ""
 
-puts "=========........... accion a realizar $accion "
-
 if {$accion == "insertar"} {
-	puts "----------------- ANTES DE TRATAR DE INSERTAR......"	
 	set res [td_categorias::insertar_actividades_temporales -nom_actividad $nom_actividad -nom_categoria $nom_categoria -dsc_actividad $dsc_actividad -nom_modalidad $nom_modalidad -nom_periodo $nom_periodo -fecha_inicio $fecha_inicio -fecha_final $fecha_final -id_calendario $id_calendario -calendario $calendario -id_categoria $id_categoria -id_modalidad $id_modalidad -id_periodo $id_periodo -comunidades $comunidades -estado_publicacion $estado_publicacion]
-	puts "----------------- $res"
 
 	if { $res == 1 } {
-		set  msn "<h2 style='color:#000066'>La inserción fue realizada de manera correcta.</h2>";
+		set  msn "<h2 style='color:#000066'>La inserción fue realizada de manera correcta.</h2>"
 	} elseif { $res == -1 } {
-		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, la actividad ya existe en tabla de actividades temporales.</h2>";	
+		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, la actividad ya existe en tabla de actividades temporales.</h2>"	
 	} elseif { $res == -2 || $res == -3 } {
-		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, la actividad ya existe en la base de datos.</h2>";	
+		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, la actividad ya existe en la base de datos.</h2>"	
 	} elseif { $res == -4 } {
-		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, error al realizar la transacción.</h2>";
+		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, error al realizar la transacción.</h2>"
 	} else {
-		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, error desconocido.</h2>";
+		set  msn "<h2 style='color:#990000'>Error: Inserción fallida, error desconocido.</h2>"
 	}
 	
 }
 
 if {$accion == "eliminar"} {
-    puts "==========........ Entra a eliminar.... trata de eliminar actividad temporal con id_actividad $id_actividad"
 	set res [td_categorias::eliminar_actividad_temporal -id_actividad $id_actividad]
-    puts "==========........ ya elimino actividad temporal resultado $res"
 	if {$res == -1} { 
 		set  msn "<h2 style='color:#990000'>Error: Eliminación fallida, problemas al conectarse con la base de datos.</h2>"		
 	} else {
-        puts "==========........ todo bien... sigue eliminando"
 		set estado_publicacion [td_categorias::obtener_estado_publicacion -id_actividad $id_actividad]
 		set res [td_inac_procs::eliminar_actividad -id_actividad $id_actividad -estado_publicacion $estado_publicacion]
 		if {$res == -1} { 
@@ -61,8 +54,6 @@ if {$accion == "eliminar"} {
 		}
 	}
 }
-
-
 
 ad_form -name frm_mensaje -has_submit 1 -form {
     {mensaje:string(hidden) 

@@ -1,7 +1,5 @@
 <?xml version="1.0"?>
-
 <queryset>
-
    <!--Consultas dinamicas para el grid de actividades -->
    <partialquery name="sql_query_calendario">
 	  <querytext>         
@@ -56,5 +54,4 @@
 		  $sql_query        
     </querytext> 
   </fullquery>  
-  
 </queryset>

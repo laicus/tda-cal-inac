@@ -1,12 +1,11 @@
 # tda-cal-inac/www/calendarios/insertar/insertar_calendario.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @author Mauricio Ramírez
-    @creation-date 2013-02-05
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
-
     Ingresa un calendario
-} { } 
+} {
+} 
 
 # Crea el formulario para el año 
 ad_form -name formulario -mode edit -has_submit 1 \
@@ -21,4 +20,3 @@ ad_form -name formulario -mode edit -has_submit 1 \
             "Valor no es valido"
     }
 }
-

@@ -1,7 +1,7 @@
 #tda-cal-inac/www/formularios/modalidades-lista.tcl
 ad_page_contract {    
     Lista de modalidades para carga dinamica en la seleccion
-    @author Fabiana Contreras (fcontreras@itcr.ac.cr)
+    @author Ederick Navas (enavas@itcr.ac.cr)
     @creation-date 2012-12-09
     @cvs-id $Id$
 } {

@@ -1,7 +1,7 @@
 # tda-cal-inac/www/informacionGeneral.tcl
-
 ad_page_contract  {
-    @author Marco Loaiza (mloaiza@itcr.ac.r)
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 }

@@ -1,5 +1,0 @@
-<div id = "resultado"></div>
-<hr/>
-<div id = "pagina">
-	<include src="ver">
-</div>

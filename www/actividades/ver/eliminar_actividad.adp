@@ -78,7 +78,7 @@
 		</div>		
 
 	</div>
-	<h2 style='color:#000066'>¿Esta seguro que desea eliminar esta actividad?</h2>
+	<h2 style='color:#000066'>¿Está seguro que desea eliminar esta actividad?</h2>
 	<div class="form-button">
 				<a href="javascript:eliminar_actividad()" title="Si" class="button">Si</a>
 				<a href="javascript:volver_ver_actividades();" title="Volver" class="button">Volver</a>

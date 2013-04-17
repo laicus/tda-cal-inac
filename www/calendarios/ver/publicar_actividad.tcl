@@ -1,7 +1,7 @@
 #tda-cal-inac/www/calendarios/ver/publicar_actividad.tcl
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	{id_actividad:notnull}
@@ -9,5 +9,3 @@ ad_page_contract {
 
 set res [td_calendarios::publicar_actividad -id_actividad $id_actividad]
 ns_write $res
-
-

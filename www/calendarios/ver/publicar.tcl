@@ -1,10 +1,11 @@
 ad_page_contract {
-    @author Virgilio Solis Rojas (vsolisrojas@gmail.com)
-    @creation-date 2009-01-13
+    @author Ederick Navas (enavas@itcr.ac.cr)
+    @creation-date 2013-04-16
     @cvs-id $Id$
 } {
 	{id_calendario:notnull}
 }
+
 set columnas {
 	nom_actividad {
 	  display_template { <left> <a href=\"javascript:cargar_form_ver_actividad('@actividades.id_actividad@','@actividades.es_especial@')"\>@actividades.nom_actividad@</a></left> }
